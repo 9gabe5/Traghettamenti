@@ -2,12 +2,14 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0a0f1e">
-<title>Traghettamenti · Parco Prenestino</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Traghettamenti">
+<meta name="theme-color" content="#122646">
+<title>Traghettamenti · Luglio 2026</title>
+<link rel="icon" type="image/png" href="assets/logo-pop.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <style>
   :root {
     --bg: #0a0f1e;
@@ -188,11 +190,147 @@
   .stato-info { font-size:12px; color:var(--muted); margin-top:6px; line-height:1.5; }
   .stato-binario { display:inline-block; font-family:var(--mono); font-size:13px; font-weight:700; color:var(--yellow); background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.3); padding:3px 10px; border-radius:6px; margin-top:6px; }
 </style>
+<style id="visual-refresh">
+  :root {
+    --bg:#f1f4f8;--card:#ffffff;--border:#d8e0e8;--accent:#e33f47;--accent2:#165ea8;
+    --green:#16865b;--red:#c9363f;--yellow:#bd7b00;--purple:#6d57ae;
+    --text:#172333;--muted:#657386;--navy:#122646;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{scrollbar-color:#b8c3cf transparent;}
+  body{
+    max-width:none;margin:0;font-family:var(--sans);line-height:1.45;
+    background:
+      radial-gradient(circle at 92% 3%,rgba(22,94,168,.11),transparent 28rem),
+      linear-gradient(180deg,#f9fbfd 0,#f1f4f8 38rem);
+  }
+  button,input{font:inherit;}
+  button{transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;}
+  button:hover{transform:translateY(-1px);}
+  button:active{transform:translateY(0);}
+  button:focus-visible,input:focus-visible,.treno-card:focus-visible{outline:3px solid rgba(22,94,168,.2);outline-offset:2px;}
+  .header{
+    min-height:76px;padding:10px max(20px,calc((100vw - 1120px)/2));
+    background:rgba(250,252,254,.94);border-bottom:1px solid var(--border);
+    box-shadow:0 8px 28px rgba(18,38,70,.06);backdrop-filter:blur(18px);
+  }
+  .header::before{
+    content:"";position:absolute;left:0;right:0;top:0;height:4px;
+    background:linear-gradient(90deg,var(--navy) 0 68%,#f0bd28 68% 74%,var(--accent) 74% 84%,var(--accent2) 84%);
+  }
+  .header-brand{display:flex;align-items:center;gap:11px;min-width:0;}
+  .header-logo{display:grid;place-items:center;width:50px;height:50px;flex:0 0 50px;border-radius:15px;background:var(--navy);overflow:hidden;}
+  .header-logo img{width:42px;height:46px;object-fit:contain;}
+  .header-title{font-size:16px;line-height:1.1;font-weight:850;letter-spacing:-.25px;text-transform:none;color:var(--text);}
+  .header-kicker{display:block;margin-top:4px;font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--accent2);}
+  .clock{font-size:13px;font-weight:750;color:var(--accent2);font-variant-numeric:tabular-nums;}
+  .day-badge{font-size:10px;letter-spacing:.6px;color:var(--accent);background:#fff0f1;border-color:#f0c5c8;border-radius:999px;padding:5px 9px;}
+  .screen{width:min(1120px,calc(100% - 40px));margin:0 auto;padding:34px 0 76px;}
+  #screenConsulta,#screenTreno{width:min(980px,calc(100% - 40px));}
+  #screenDetail{width:min(760px,calc(100% - 40px));}
+  #screenHome.active{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch;}
+  .home-logo{
+    grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:24px;text-align:left;
+    padding:34px 0 30px;
+  }
+  .home-logo .train-icon{
+    display:grid;place-items:center;width:112px;height:112px;flex:0 0 112px;margin:0;
+    border-radius:30px;background:var(--navy);box-shadow:0 18px 40px rgba(18,38,70,.20);overflow:hidden;
+  }
+  .home-logo .train-icon img{width:91px;height:103px;object-fit:contain;}
+  .home-logo .line1{font-size:clamp(34px,5vw,56px);line-height:1;letter-spacing:-2px;font-weight:850;}
+  .home-logo .line2{font-size:11px;letter-spacing:2px;color:var(--accent2);margin-top:8px;}
+  .data-chip{display:inline-flex;margin-bottom:10px;padding:5px 9px;border-radius:999px;background:#e8f0fa;color:var(--accent2);font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;}
+  .big-btn{
+    min-height:154px;margin:0;padding:26px;border:1px solid var(--border);border-radius:22px;
+    background:rgba(255,255,255,.9);box-shadow:0 10px 32px rgba(18,38,70,.07);
+  }
+  .big-btn:hover{box-shadow:0 18px 42px rgba(18,38,70,.12);border-color:#b8c5d3;}
+  .big-btn.primary{background:linear-gradient(140deg,#173f74,#122646);border-color:#173f74;box-shadow:0 14px 35px rgba(18,38,70,.20);}
+  .big-btn.secondary .btn-label,.big-btn.secondary .btn-title{color:var(--text);}
+  .big-btn.secondary .btn-sub{color:var(--muted);opacity:1;}
+  .big-btn.secondary .arrow{color:var(--accent2);}
+  .big-btn .btn-label{letter-spacing:1.3px;}
+  .big-btn .btn-title{font-size:25px;letter-spacing:-.5px;}
+  .big-btn .btn-sub{font-size:13px;line-height:1.5;}
+  .search-wrap{
+    grid-column:1/-1;margin-top:8px;padding:22px;border:1px solid var(--border);border-radius:20px;
+    background:rgba(255,255,255,.82);box-shadow:0 8px 28px rgba(18,38,70,.05);
+  }
+  .search-label,.section-title,.filtro-label{letter-spacing:.8px;color:#46576b;}
+  .search-input{min-height:50px;background:#fff;border-color:#cbd5df;color:var(--text);font-size:16px;}
+  .search-input:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(22,94,168,.1);}
+  .search-btn{background:var(--accent2);color:#fff;padding:14px 22px;}
+  .turno-grid{gap:10px;}
+  .turno-btn{padding:16px 10px;border-color:var(--border);background:rgba(255,255,255,.85);color:var(--text);font-size:11px;letter-spacing:.3px;text-transform:none;}
+  .turno-btn.active{border-color:var(--accent2);background:#eaf2fb;color:var(--accent2);box-shadow:0 6px 16px rgba(22,94,168,.1);}
+  .turno-nav{padding:15px 18px;border-radius:17px;background:#fff;box-shadow:0 6px 20px rgba(18,38,70,.05);}
+  .nav-arrow{color:var(--accent2);}
+  .filtro-grid{gap:7px;}
+  .filtro-btn{padding:10px 5px;border-color:var(--border);background:#fff;color:var(--muted);}
+  .treni-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;}
+  .treno-card,.search-result-card{
+    min-height:88px;border-color:var(--border);border-radius:17px;padding:17px 18px;background:#fff;
+    box-shadow:0 5px 18px rgba(18,38,70,.055);
+  }
+  .treno-card:hover,.search-result-card:hover{transform:translateY(-1px);border-color:#b8c5d3;box-shadow:0 11px 24px rgba(18,38,70,.09);}
+  .treno-card.highlight{border-color:var(--accent);box-shadow:0 0 0 2px rgba(227,63,71,.12);}
+  .treno-num{color:var(--navy);font-size:22px;}
+  .treno-orari{color:#58687a;}
+  .tipo-tradizionale{background:#eaf2fb;color:var(--accent2);border-color:#c7daef;}
+  .tipo-vallone{background:#fff4dc;color:#986200;border-color:#ead4a2;}
+  .tipo-htr{background:#f0edfa;color:var(--purple);border-color:#d8d0ef;}
+  .trole-traghetto{background:#eaf2fb;color:var(--accent2);border-color:#c7daef;}
+  .trole-t1{background:#e9f6ef;color:var(--green);border-color:#c2e5d2;}
+  .trole-t2{background:#fff4dc;color:#986200;border-color:#ead4a2;}
+  .trole-t3{background:#f0edfa;color:var(--purple);border-color:#d8d0ef;}
+  .back-btn{color:var(--accent2);font-weight:750;}
+  .detail-hero,.info-box,.seq-box,.rientro-box{background:#fff;border-color:var(--border);box-shadow:0 5px 18px rgba(18,38,70,.04);}
+  .detail-num{color:var(--navy);}
+  .prova-box{background:linear-gradient(135deg,#fff8e9,#fff3ee);border-color:#ecd4ac;}
+  .note-box{background:#fff2f3;border-color:#efc9cc;}
+  .stato-box.loading{background:#fff;border-color:var(--border);}
+  .search-results-wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+  .search-result-card{margin:0;position:relative;}
+  @media (max-width:720px){
+    .header{min-height:68px;padding:9px 14px;}
+    .header-logo{width:44px;height:44px;flex-basis:44px;border-radius:13px;}
+    .header-logo img{width:37px;height:41px;}
+    .header-title{font-size:14px;}
+    .header-kicker{font-size:8px;}
+    .screen,#screenConsulta,#screenTreno,#screenDetail{width:calc(100% - 28px);padding:24px 0 55px;}
+    #screenHome.active{grid-template-columns:1fr;gap:11px;}
+    .home-logo{justify-content:flex-start;gap:16px;padding:22px 0 21px;}
+    .home-logo .train-icon{width:82px;height:82px;flex-basis:82px;border-radius:23px;}
+    .home-logo .train-icon img{width:68px;height:75px;}
+    .home-logo .line1{font-size:31px;letter-spacing:-1.1px;}
+    .home-logo .line2{font-size:9px;letter-spacing:1.4px;}
+    .data-chip{font-size:8px;margin-bottom:7px;}
+    .big-btn{min-height:0;padding:20px;border-radius:18px;}
+    .big-btn .btn-title{font-size:21px;}
+    .search-wrap{padding:16px;border-radius:18px;}
+    .search-row{display:grid;grid-template-columns:1fr auto;}
+    .turno-grid{gap:7px;}
+    .turno-btn{padding:13px 5px;}
+    .filtro-grid{overflow-x:auto;grid-template-columns:repeat(5,minmax(64px,1fr));padding-bottom:3px;}
+    .treni-list,.search-results-wrap{grid-template-columns:1fr;}
+    .treno-card{min-height:82px;}
+  }
+  @media (max-width:390px){
+    .home-logo .line1{font-size:27px;}
+    .header-title{font-size:13px;}
+    .day-badge{display:none;}
+  }
+</style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-title">Traghettamenti · PP</div>
+  <div class="header-brand">
+    <span class="header-logo"><img src="assets/logo-pop.png" alt=""></span>
+    <div class="header-title">Traghettamenti<span class="header-kicker">Parco Prenestino · Luglio 2026</span></div>
+  </div>
   <div style="display:flex;gap:8px;align-items:center">
     <span class="day-badge" id="dayBadge"></span>
     <span class="clock" id="clock"></span>
@@ -202,9 +340,12 @@
 <!-- HOME -->
 <div class="screen active" id="screenHome">
   <div class="home-logo">
-    <span class="train-icon">🚆</span>
-    <div class="line1">Traghettamenti</div>
-    <div class="line2">Parco Prenestino</div>
+    <span class="train-icon"><img src="assets/logo-pop.png" alt="Logo frontale elettrotreno Pop"></span>
+    <div>
+      <div class="data-chip">Aggiornato dal 14 luglio 2026</div>
+      <div class="line1">Traghettamenti</div>
+      <div class="line2">Parco Prenestino</div>
+    </div>
   </div>
   <button class="big-btn primary" onclick="goTraghettamento()">
     <div class="btn-label">Modalità attiva</div>
@@ -222,7 +363,7 @@
   <div class="search-wrap">
     <div class="search-label">🔍 Cerca treno</div>
     <div class="search-row">
-      <input type="number" id="searchInput" class="search-input" placeholder="Es. 534, 774, 591…" inputmode="numeric">
+      <input type="text" id="searchInput" class="search-input" placeholder="Es. 534, 774, RM, SMLB…" inputmode="search" autocapitalize="characters">
       <button class="search-btn" onclick="cercaTreno()">Cerca</button>
     </div>
     <div id="searchResults"></div>
@@ -279,12 +420,21 @@
 const TURNI = {
   mattina: {
     nome:'Turno Mattina', emoji:'🌅', range:'06:00 – 14:00',
-    // ruoli: per ogni ruolo, treni portati + acc da provare
     ruoli: {
-      traghetto: { treni:[723,1956,727], acc:[] },
-      t1:        { treni:[534,531],      acc:[540] },
-      t2:        { treni:[703,581,553],  acc:[] },
-      t3:        { treni:[771,1960],     acc:[592] }
+      traghetto: { perGiorno: {
+        lunedi:{treni:[723,1956,727],acc:[]}, martedi:{treni:[723,581,727],acc:[]},
+        mercoledi:{treni:[723,581,727],acc:[]}, giovedi:{treni:[723,581,727],acc:[]},
+        venerdi:{treni:[723,581,727],acc:[]}, sabato:{treni:[723,581,727],acc:[]},
+        domenica:{treni:[723,1956,727],acc:[]}
+      }},
+      t1: { treni:[534,582,553], acc:[592] },
+      t2: { perGiorno: {
+        lunedi:{treni:[581],acc:[555,540]}, martedi:{treni:[1956,531],acc:[555,540]},
+        mercoledi:{treni:[1956,531],acc:[555,540]}, giovedi:{treni:[1956,531],acc:[555,540]},
+        venerdi:{treni:[1956,531],acc:[555,540]}, sabato:{treni:[1956,531],acc:[555,540]},
+        domenica:{treni:[],acc:[555,540]}
+      }},
+      t3: { treni:[771,551,1960], acc:[] }
     },
     treni: [
       { id:771,  tipo:'TRADIZIONALE', desc:'Rientro Tradizionale da Termini',
@@ -296,35 +446,38 @@ const TURNI = {
         note:'Rientro Tradizionale ore 6:35 Da Termini. Prendere Corsetta Parco alle 6:10 (Lun-Ven). Sab-Dom e Festivi: Taxi.',
         excludeOn:[] },
 
+      { id:1956, tipo:'TRADIZIONALE', desc:'Rientro Tradizionale da Termini',
+        partenzaPP:null, arrTermini:null, notaDa:'Da Termini · 05:57 mar-sab / 07:24 dom-lun',
+        rientro:[{tipo:'navetta', desc:'Corsetta Parco 06:10', note:'Martedì-sabato'}],
+        note:'Martedì-sabato: rientro tradizionale da Termini alle 05:57 e Corsetta Parco alle 06:10. Domenica e lunedì: arrivo alle 07:24 nella sequenza Trenitalia.',
+        excludeOn:[] },
+
       { id:534,  tipo:'VALLONE', desc:'VALLONE',
         partenzaPP:'06:10', arrTermini:'07:13',
-        rientro:[
-          {tipo:'treno', trenoNum:531, tipoTreno:'TRADIZIONALE', orario:'08:55', note:'531 Escluso Domenica', excludeGiorni:['domenica']},
-          {tipo:'domenica', desc:'Navetta 08:25 Linea 1 (Via Marsala)'}
-        ],
-        note:'Rientra 531 Tradizionale Arr. T. 8:55 (531 Escluso Domenica). La domenica: navetta 8:25 Linea 1 (Via Marsala).',
+        rientro:[{tipo:'treno', trenoNum:582, tipoTreno:'TRADIZIONALE', orario:'08:34'}],
+        note:'Rientra con il 582 da Termini, tradizionale, ore 08:34.',
         excludeOn:[] },
 
-      { id:531,  tipo:'TRADIZIONALE', desc:'Rientro con 531',
-        partenzaPP:null, arrTermini:'08:55', notaDa:'Rientro da Termini',
-        rientro:null, note:'531 Escluso Domenica.', excludeOn:['domenica'] },
+      { id:582,  tipo:'TRADIZIONALE', desc:'Rientro con 582',
+        partenzaPP:null, arrTermini:'08:34', notaDa:'Rientro da Termini',
+        rientro:null, note:null, excludeOn:[] },
 
-      { id:703,  tipo:'HTR', desc:'HTR TRADIZIONALE',
-        partenzaPP:'06:48', arrTermini:'07:28',
-        rientro:[
-          {tipo:'treno', trenoNum:581, tipoTreno:'TRADIZIONALE', orario:'08:20', note:'581 Escluso Domenica', excludeGiorni:['domenica']},
-          {tipo:'domenica', desc:'Navetta 08:25 Linea 1 (Via Marsala)'}
-        ],
-        note:'Rientra 581 Trad. Arr. T. 8:20 (581 Escluso Domenica). La domenica: navetta 8:25 Linea 1 (Via Marsala).',
-        excludeOn:[] },
-
-      { id:581,  tipo:'TRADIZIONALE', desc:'Rientro con 581',
+      { id:581,  tipo:'TRADIZIONALE', desc:'Servizio mattina',
         partenzaPP:null, arrTermini:'08:20', notaDa:'Rientro da Termini',
-        rientro:null, note:'581 Escluso Domenica.', excludeOn:['domenica'] },
+        rientro:null, note:'Lunedì: rientro tradizionale da Termini alle 08:20. Martedì-sabato: inserito nella sequenza Trenitalia.', excludeOn:['domenica'] },
+
+      { id:551,  tipo:'TRADIZIONALE', desc:'TRADIZIONALE',
+        partenzaPP:'08:46', arrTermini:'09:26',
+        rientro:[{tipo:'treno', trenoNum:1960, tipoTreno:'TRADIZIONALE', orario:'09:51'}],
+        note:'Il traghetto del 531 sale con il 551 dal martedì al sabato.', excludeOn:[] },
 
       { id:1960, tipo:'TRADIZIONALE', desc:'Rientro Tradizionale da Termini',
         presentazione:'09:51', partenzaPP:null, arrTermini:null, notaDa:'Da Termini ore 9:51',
         rientro:null, note:'Rientro Tradizionale Ore 9:51 Da Termini.', excludeOn:[] },
+
+      { id:531,  tipo:'TRADIZIONALE', desc:'Rientro con 531',
+        partenzaPP:null, arrTermini:'08:55', notaDa:'Rientro da Termini',
+        rientro:null, note:'Martedì-sabato: rientro tradizionale ore 08:55; il traghetto sale con il 551. Lunedì a cura 303.', excludeOn:['domenica'] },
 
       { id:553,  tipo:'TRADIZIONALE', desc:'TRADIZIONALE',
         partenzaPP:'11:46', arrTermini:'12:26',
@@ -336,53 +489,76 @@ const TURNI = {
 
       { id:723,  tipo:'TRADIZIONALE', desc:'Traghetto Trenitalia',
         partenzaPP:null, arrTermini:null,
-        note:'Treno Traghetto Trenitalia. Sequenza: 723 → 1956 → 727.', excludeOn:[] },
-
-      { id:1956, tipo:'TRADIZIONALE', desc:'Traghetto Trenitalia',
-        partenzaPP:null, arrTermini:null,
-        note:'Treno Traghetto Trenitalia. Sequenza: 723 → 1956 → 727.', excludeOn:[] },
+        note:'Sequenza Trenitalia: domenica/lunedì 723 → 1956 → 727; martedì-sabato 723 → 581 → 727.', excludeOn:[] },
 
       { id:727,  tipo:'TRADIZIONALE', desc:'Traghetto Trenitalia',
         partenzaPP:null, arrTermini:null,
-        note:'Treno Traghetto Trenitalia. Sequenza: 723 → 1956 → 727.', excludeOn:[] },
+        note:'Sequenza Trenitalia: domenica/lunedì 723 → 1956 → 727; martedì-sabato 723 → 581 → 727.', excludeOn:[] },
 
       { id:540,  tipo:'VALLONE', desc:'ACC – Accessoriare/provare',
-        partenzaPP:null, arrTermini:null, isAcc:true,
-        note:'Treno 540: da accessoriare/provare. Presentazione ore 13:00. Portato dal turno pomeriggio.', excludeOn:[] },
+        presentazione:'13:00', partenzaPP:null, arrTermini:null, isAcc:true,
+        note:'Da accessoriare/provare. Presentazione alle 13:00; sarà portato dal turno pomeriggio.', excludeOn:[] },
 
       { id:592,  tipo:'TRADIZIONALE', desc:'ACC – Accessoriare/provare',
-        partenzaPP:null, arrTermini:null, isAcc:true,
-        note:'Treno 592: da accessoriare/provare. Portato dal turno pomeriggio.', excludeOn:[] }
+        presentazione:'13:00', partenzaPP:null, arrTermini:null, isAcc:true,
+        note:'Da accessoriare/provare. Presentazione alle 13:00; sarà portato dal turno pomeriggio.', excludeOn:[] },
+
+      { id:555,  tipo:'TRADIZIONALE', desc:'ACC – Accessoriare/provare',
+        presentazione:'13:00', partenzaPP:null, arrTermini:null, isAcc:true,
+        note:'Da accessoriare/provare. Presentazione alle 13:00; sarà portato dal turno pomeriggio.', excludeOn:[] }
     ]
   },
 
   pomeriggio: {
     nome:'Turno Pomeriggio', emoji:'☀️', range:'14:00 – 22:00',
     ruoli: {
-      traghetto: { treni:[592,1955,702], acc:[] },
-      t1:        { treni:[591,556],      acc:[774] },
-      t2:        { treni:[705,546,585],  acc:[] },
-      t3:        { treni:[540,598,728],  acc:[1959] }
+      traghetto: { perGiorno: {
+        lunedi:null, martedi:{treni:[707,1955,702],acc:[]}, mercoledi:{treni:[707,1955,702],acc:[]},
+        giovedi:{treni:[707,1955,702],acc:[]}, venerdi:{treni:[707,1955,702],acc:[]},
+        sabato:{treni:[707,1955,702],acc:[]}, domenica:null
+      }},
+      t1: { treni:[555,591,556], acc:[774] },
+      t2: { treni:[592,546,585], acc:[] },
+      t3: { treni:[540,700,598,728], acc:[1959] }
     },
     treni: [
+      { id:555,  tipo:'TRADIZIONALE', desc:'TRADIZIONALE',
+        partenzaPP:'13:46', arrTermini:'14:26',
+        rientro:[{tipo:'taxi', desc:'Taxi'}], note:null, excludeOn:[] },
+
       { id:540,  tipo:'VALLONE', desc:'VALLONE',
         partenzaPP:'14:12', arrTermini:'15:22',
-        rientro:[{tipo:'taxi', desc:'Taxi'}],
-        note:null, excludeOn:[] },
+        rientro:[{tipo:'treno', trenoNum:700, tipoTreno:'TRADIZIONALE', orario:'14:34', note:'Cambio volante PdC al paraurti'}],
+        note:'Rientra con il 700 alle 14:34. Cambio volante con PdC al paraurti.', excludeOn:[] },
 
-      { id:705,  tipo:'HTR', desc:'HTR TRADIZIONALE',
-        partenzaPP:'15:21', arrTermini:'16:01',
-        rientro:[{tipo:'taxi', desc:'Taxi', soloGiorni:['venerdi']}],
-        note:'Solo Venerdì: rientra con Taxi.', excludeOn:[] },
+      { id:700,  tipo:'TRADIZIONALE', desc:'Rientro con 700',
+        partenzaPP:null, arrTermini:'14:34', notaDa:'Rientro da Termini',
+        rientro:null, note:'Cambio volante con PdC al paraurti.', excludeOn:[] },
+
+      { id:592,  tipo:'VALLONE', desc:'VALLONE',
+        partenzaPP:'14:20', arrTermini:'15:30',
+        rientro:[{tipo:'taxi', desc:'Taxi'}], note:null, excludeOn:[] },
+
+      { id:707,  tipo:'TRADIZIONALE', desc:'Traghetto Trenitalia',
+        partenzaPP:null, arrTermini:null,
+        note:'Sequenza Trenitalia martedì-sabato: 707 → 1955 → 702.', excludeOn:['domenica','lunedi'] },
+
+      { id:1955, tipo:'TRADIZIONALE', desc:'Traghetto Trenitalia',
+        partenzaPP:null, arrTermini:null,
+        note:'Sequenza Trenitalia martedì-sabato: 707 → 1955 → 702.', excludeOn:['domenica','lunedi'] },
+
+      { id:702,  tipo:'TRADIZIONALE', desc:'Traghetto Trenitalia',
+        partenzaPP:null, arrTermini:null,
+        note:'Sequenza Trenitalia martedì-sabato: 707 → 1955 → 702.', excludeOn:['domenica','lunedi'] },
 
       { id:591,  tipo:'TRADIZIONALE', desc:'TRADIZIONALE',
         partenzaPP:'16:46', arrTermini:'17:26',
         rientro:[{tipo:'treno', trenoNum:556, tipoTreno:'TRADIZIONALE', orario:'17:34'}],
-        note:null, excludeOn:['sabato'] },
+        note:null, excludeOn:[] },
 
       { id:556,  tipo:'TRADIZIONALE', desc:'Rientro con 556',
         partenzaPP:null, arrTermini:'17:34', notaDa:'Rientro da Termini',
-        rientro:null, note:null, excludeOn:['sabato'] },
+        rientro:null, note:null, excludeOn:[] },
 
       { id:598,  tipo:'VALLONE', desc:'VALLONE',
         partenzaPP:'17:05', arrTermini:'18:15',
@@ -390,7 +566,7 @@ const TURNI = {
           {tipo:'treno', trenoNum:728, tipoTreno:'TRADIZIONALE', orario:'18:34', note:'Escluso Sabato', excludeGiorni:['sabato']},
           {tipo:'sabato', desc:'Il Sabato: 728 da Termini (orario variabile)'}
         ],
-        note:'598 Escluso Sabato. Il Sabato 728 da Termini.', excludeOn:[] },
+        note:'598 escluso sabato. Il sabato il 728 parte da Termini.', excludeOn:['sabato'] },
 
       { id:728,  tipo:'TRADIZIONALE', desc:'Rientro con 728',
         partenzaPP:null, arrTermini:'18:34', notaDa:'Rientro da Termini',
@@ -400,25 +576,13 @@ const TURNI = {
         partenzaPP:'18:45', arrTermini:'19:55',
         rientro:[
           {tipo:'treno', trenoNum:'*585', tipoTreno:'TRADIZIONALE', orario:'dopo le 20:00', note:'Escluso Sabato', excludeGiorni:['sabato']},
-          {tipo:'avviso', desc:'*585 sab-dom e festivi: verificare se arriva in anticipo', mostraGiorni:['sabato','domenica']}
+          {tipo:'avviso', desc:'*585 sab-dom e festivi: se arriva alle 16:20 si lega con il 592', mostraGiorni:['sabato','domenica']}
         ],
-        note:'Rientra con *585 dopo le 20. 546 Escluso Sabato. Per *585 sab-dom e festivi verificare anticipo.', excludeOn:[] },
+        note:'Rientra con *585 dopo le 20. 546 escluso sabato. Sab-dom e festivi: se *585 arriva in anticipo alle 16:20, si lega con il 592.', excludeOn:['sabato'] },
 
       { id:585,  tipo:'TRADIZIONALE', desc:'Rientro con *585',
         partenzaPP:null, arrTermini:'dopo le 20:00', notaDa:'Rientro da Termini',
-        rientro:null, note:'Sab-Dom e festivi: verificare se arriva in anticipo.', excludeOn:['sabato'] },
-
-      { id:592,  tipo:'TRADIZIONALE', desc:'Traghetto Trenitalia',
-        partenzaPP:null, arrTermini:null,
-        note:'Treno Traghetto Trenitalia. Sequenza: 592 → 1955 → 702.', excludeOn:[] },
-
-      { id:1955, tipo:'TRADIZIONALE', desc:'Traghetto Trenitalia',
-        partenzaPP:null, arrTermini:null,
-        note:'Treno Traghetto Trenitalia. Sequenza: 592 → 1955 → 702.', excludeOn:[] },
-
-      { id:702,  tipo:'TRADIZIONALE', desc:'Traghetto Trenitalia',
-        partenzaPP:null, arrTermini:null,
-        note:'Treno Traghetto Trenitalia. Sequenza: 592 → 1955 → 702.', excludeOn:[] },
+        rientro:null, note:'Sab-dom e festivi: se arriva in anticipo alle 16:20 si lega con il 592.', excludeOn:[] },
 
       { id:774,  tipo:'TRADIZIONALE', desc:'ACC – Accessoriare/provare',
         presentazione:'20:30', partenzaPP:null, arrTermini:null, isAcc:true,
@@ -434,14 +598,14 @@ const TURNI = {
     nome:'Turno Notte', emoji:'🌙', range:'22:00 – 06:00',
     ruoli: {
       traghetto: null,
-      t1: { treni:[774,560], acc:[534,723] },
+      t1: { treni:[774,560], acc:[534,723,703,551,'RM','SMLB'] },
       t2:null, t3:null
     },
     treni: [
       { id:774,  tipo:'TRADIZIONALE', desc:'TRADIZIONALE',
         partenzaPP:'21:55', arrTermini:'22:35',
         rientro:[{tipo:'treno', trenoNum:560, tipoTreno:'TRADIZIONALE', orario:'22:35'}],
-        note:'Giorni DISPARI: loco 466. Giorni PARI: loco 462.', excludeOn:[] },
+        note:null, excludeOn:[] },
 
       { id:560,  tipo:'TRADIZIONALE', desc:'Rientro con 560',
         partenzaPP:null, arrTermini:'22:35', notaDa:'Rientro da Termini',
@@ -453,7 +617,23 @@ const TURNI = {
 
       { id:723,  tipo:'TRADIZIONALE', desc:'ACC – Accessoriare/provare',
         partenzaPP:null, arrTermini:null, isAcc:true,
-        note:'Treno 723: da accessoriare/provare. Sarà portato dal turno mattina.', excludeOn:[] }
+        note:'Treno 723: da accessoriare/provare. Sarà portato dal turno mattina.', excludeOn:[] },
+
+      { id:703,  tipo:'HTR', desc:'ACC – Accessoriare/provare',
+        partenzaPP:null, arrTermini:null, isAcc:true,
+        note:'Da accessoriare/provare durante il turno notte.', excludeOn:[] },
+
+      { id:551,  tipo:'TRADIZIONALE', desc:'ACC – Accessoriare/provare',
+        partenzaPP:null, arrTermini:null, isAcc:true,
+        note:'Da accessoriare/provare; sarà portato dal turno mattina.', excludeOn:[] },
+
+      { id:'RM', tipo:'TRADIZIONALE', desc:'Servizio RM – su richiesta',
+        partenzaPP:null, arrTermini:null, isAcc:true,
+        note:'Servizio da accessoriare/provare; altri treni su richiesta.', excludeOn:[] },
+
+      { id:'SMLB', tipo:'TRADIZIONALE', desc:'Servizio SMLB – orario variabile',
+        partenzaPP:null, arrTermini:null, isAcc:true,
+        note:'Orario e giorni variabili. Servizio da accessoriare/provare; altri treni su richiesta.', excludeOn:[] }
     ]
   }
 };
@@ -469,6 +649,12 @@ const GIORNI = ['domenica','lunedi','martedi','mercoledi','giovedi','venerdi','s
 const GIORNI_LABEL = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
 
 function getGiorno() { return GIORNI[new Date().getDay()]; }
+function getRuoloData(turno, ruoloKey, giorno=getGiorno()) {
+  const ruolo = turno.ruoli[ruoloKey];
+  if (!ruolo) return null;
+  if (!ruolo.perGiorno) return ruolo;
+  return ruolo.perGiorno[giorno] || null;
+}
 function getTurnoByOra() {
   const h = new Date().getHours();
   if (h >= 6 && h < 14) return 'mattina';
@@ -537,11 +723,13 @@ function setFiltro(f) {
 
 function renderFiltroButtons() {
   const turno = TURNI[currentTurnoKey];
+  if (currentFiltro !== 'tutti' && !getRuoloData(turno, currentFiltro)) currentFiltro = 'tutti';
   const ids = { tutti:'fTutti', traghetto:'fTraghetto', t1:'fT1', t2:'fT2', t3:'fT3' };
   const activeClass = { tutti:'f-active-tutti', traghetto:'f-active-traghetto', t1:'f-active-t1', t2:'f-active-t2', t3:'f-active-t3' };
   Object.entries(ids).forEach(([key, btnId]) => {
     const btn = document.getElementById(btnId);
-    const hasRole = (key === 'tutti') ? true : turno.ruoli[key] !== null;
+    const ruolo = key === 'tutti' ? null : getRuoloData(turno, key);
+    const hasRole = key === 'tutti' ? true : !!(ruolo && (ruolo.treni.length || ruolo.acc.length));
     btn.className = 'filtro-btn' + (currentFiltro === key ? ' '+activeClass[key] : '');
     btn.disabled = !hasRole;
   });
@@ -550,17 +738,18 @@ function renderFiltroButtons() {
 function getTreniPerFiltro(turnoKey, filtro) {
   const turno = TURNI[turnoKey];
   if (filtro === 'tutti') return turno.treni;
-  const ruolo = turno.ruoli[filtro];
+  const ruolo = getRuoloData(turno, filtro);
   if (!ruolo) return [];
   const allIds = [...ruolo.treni, ...ruolo.acc];
-  return turno.treni.filter(t => allIds.includes(t.id));
+  return allIds.map(id => turno.treni.find(t => String(t.id) === String(id))).filter(Boolean);
 }
 
-function getRuoloDiTreno(turnoKey, trenoId) {
+function getRuoloDiTreno(turnoKey, trenoId, giorno=getGiorno()) {
   const ruoli = TURNI[turnoKey].ruoli;
-  for (const [key, r] of Object.entries(ruoli)) {
+  for (const key of Object.keys(ruoli)) {
+    const r = getRuoloData(TURNI[turnoKey], key, giorno);
     if (!r) continue;
-    if (r.treni.includes(trenoId) || r.acc.includes(trenoId)) return key;
+    if ([...r.treni,...r.acc].some(id => String(id) === String(trenoId))) return key;
   }
   return null;
 }
@@ -646,12 +835,11 @@ function openDetail(treno, turnoKey) {
 
   const tipoClass = treno.tipo==='VALLONE'?'tipo-vallone':treno.tipo==='HTR'?'tipo-htr':'tipo-tradizionale';
   const ruolo = getRuoloDiTreno(turnoKey, treno.id);
-  const turnoRuoli = TURNI[turnoKey].ruoli;
 
   // Sequenza ruolo
   let seqHTML = '';
-  if (ruolo && turnoRuoli[ruolo]) {
-    const rd = turnoRuoli[ruolo];
+  const rd = ruolo ? getRuoloData(TURNI[turnoKey], ruolo, giorno) : null;
+  if (ruolo && rd) {
     const seqItems = [...rd.treni.map(id=>({id,acc:false})), ...rd.acc.map(id=>({id,acc:true}))];
     const roleLabel = ruolo==='traghetto'?'Trenitalia':ruolo.toUpperCase()+' MIST';
     const flow = seqItems.map((s,i) => {
@@ -777,7 +965,7 @@ document.getElementById('searchInput').addEventListener('keydown', function(e) {
 });
 
 function cercaTreno() {
-  const q = parseInt(document.getElementById('searchInput').value.trim());
+  const q = document.getElementById('searchInput').value.trim().toUpperCase();
   const container = document.getElementById('searchResults');
   container.innerHTML = '';
   if (!q) return;
@@ -785,7 +973,7 @@ function cercaTreno() {
   const results = [];
   Object.entries(TURNI).forEach(([turnoKey, turno]) => {
     turno.treni.forEach(treno => {
-      if (String(treno.id) === String(q) || treno.id === q) {
+      if (String(treno.id).toUpperCase() === q) {
         results.push({ treno, turnoKey });
       }
     });
