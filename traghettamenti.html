@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Traghettamenti">
 <meta name="theme-color" content="#122646">
-<title>Traghettamenti · Luglio 2026</title>
+<title>Traghettamenti · Settembre 2026</title>
 <link rel="icon" type="image/png" href="assets/logo-pop.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <style>
@@ -329,7 +329,7 @@
 <div class="header">
   <div class="header-brand">
     <span class="header-logo"><img src="assets/logo-pop.png" alt=""></span>
-    <div class="header-title">Traghettamenti<span class="header-kicker">Parco Prenestino · Luglio 2026</span></div>
+    <div class="header-title">Traghettamenti<span class="header-kicker">Parco Prenestino · Settembre 2026</span></div>
   </div>
   <div style="display:flex;gap:8px;align-items:center">
     <span class="day-badge" id="dayBadge"></span>
@@ -337,12 +337,14 @@
   </div>
 </div>
 
+<div class="note-box" style="margin:12px 16px">Assegnazioni dal 13/09/2026. Il nuovo documento non riporta gli orari dei singoli treni né il tipo di materiale: quelli già presenti provengono dalla versione precedente e non sono confermati dal nuovo prospetto.</div>
+
 <!-- HOME -->
 <div class="screen active" id="screenHome">
   <div class="home-logo">
     <span class="train-icon"><img src="assets/logo-pop.png" alt="Logo frontale elettrotreno Pop"></span>
     <div>
-      <div class="data-chip">Aggiornato dal 14 luglio 2026</div>
+      <div class="data-chip">Aggiornato dal 13 settembre 2026</div>
       <div class="line1">Traghettamenti</div>
       <div class="line2">Parco Prenestino</div>
     </div>
@@ -418,222 +420,688 @@
 // ── DATI ──────────────────────────────────────────────────────────────────────
 
 const TURNI = {
-  mattina: {
-    nome:'Turno Mattina', emoji:'🌅', range:'06:00 – 14:00',
-    ruoli: {
-      traghetto: { perGiorno: {
-        lunedi:{treni:[723,1956,727],acc:[]}, martedi:{treni:[723,581,727],acc:[]},
-        mercoledi:{treni:[723,581,727],acc:[]}, giovedi:{treni:[723,581,727],acc:[]},
-        venerdi:{treni:[723,581,727],acc:[]}, sabato:{treni:[723,581,727],acc:[]},
-        domenica:{treni:[723,1956,727],acc:[]}
-      }},
-      t1: { treni:[534,582,553], acc:[592] },
-      t2: { perGiorno: {
-        lunedi:{treni:[581],acc:[555,540]}, martedi:{treni:[1956,531],acc:[555,540]},
-        mercoledi:{treni:[1956,531],acc:[555,540]}, giovedi:{treni:[1956,531],acc:[555,540]},
-        venerdi:{treni:[1956,531],acc:[555,540]}, sabato:{treni:[1956,531],acc:[555,540]},
-        domenica:{treni:[],acc:[555,540]}
-      }},
-      t3: { treni:[771,551,1960], acc:[] }
+  "mattina": {
+    "nome": "Turno Mattina",
+    "emoji": "🌅",
+    "range": "06:00 – 14:00",
+    "ruoli": {
+      "traghetto": {
+        "perGiorno": {
+          "domenica": {
+            "treni": [
+              723,
+              1956,
+              727
+            ],
+            "acc": []
+          },
+          "lunedi": {
+            "treni": [
+              723,
+              1956,
+              727
+            ],
+            "acc": []
+          },
+          "martedi": {
+            "treni": [
+              723,
+              727
+            ],
+            "acc": []
+          },
+          "mercoledi": {
+            "treni": [
+              723,
+              727
+            ],
+            "acc": []
+          },
+          "giovedi": {
+            "treni": [
+              723,
+              727
+            ],
+            "acc": []
+          },
+          "venerdi": {
+            "treni": [
+              723,
+              727
+            ],
+            "acc": []
+          },
+          "sabato": {
+            "treni": [
+              723,
+              727
+            ],
+            "acc": []
+          }
+        }
+      },
+      "t1": {
+        "perGiorno": {
+          "domenica": {
+            "treni": [
+              534
+            ],
+            "acc": []
+          },
+          "lunedi": {
+            "treni": [
+              534,
+              581
+            ],
+            "acc": []
+          },
+          "martedi": {
+            "treni": [
+              534,
+              581
+            ],
+            "acc": []
+          },
+          "mercoledi": {
+            "treni": [
+              534,
+              581
+            ],
+            "acc": []
+          },
+          "giovedi": {
+            "treni": [
+              534,
+              581
+            ],
+            "acc": []
+          },
+          "venerdi": {
+            "treni": [
+              534,
+              581
+            ],
+            "acc": []
+          },
+          "sabato": {
+            "treni": [
+              534,
+              581
+            ],
+            "acc": []
+          }
+        }
+      },
+      "t2": {
+        "perGiorno": {
+          "domenica": {
+            "treni": [
+              703
+            ],
+            "acc": [
+              540
+            ]
+          },
+          "lunedi": {
+            "treni": [
+              703,
+              531
+            ],
+            "acc": [
+              540
+            ]
+          },
+          "martedi": {
+            "treni": [
+              703,
+              531
+            ],
+            "acc": [
+              540
+            ]
+          },
+          "mercoledi": {
+            "treni": [
+              703,
+              531
+            ],
+            "acc": [
+              540
+            ]
+          },
+          "giovedi": {
+            "treni": [
+              703,
+              531
+            ],
+            "acc": [
+              540
+            ]
+          },
+          "venerdi": {
+            "treni": [
+              703,
+              531
+            ],
+            "acc": [
+              540
+            ]
+          },
+          "sabato": {
+            "treni": [
+              703,
+              531
+            ],
+            "acc": [
+              540
+            ]
+          }
+        }
+      },
+      "t3": {
+        "treni": [
+          771,
+          1960
+        ],
+        "acc": [
+          592
+        ]
+      }
     },
-    treni: [
-      { id:771,  tipo:'TRADIZIONALE', desc:'Rientro Tradizionale da Termini',
-        presentazione:'06:35', partenzaPP:null, arrTermini:null, notaDa:'Da Termini ore 6:35',
-        rientro:[
-          {tipo:'navetta', desc:'Corsetta Parco 06:10', note:'Lun-Ven'},
-          {tipo:'taxi',    desc:'Taxi', soloGiorni:['sabato','domenica']}
+    "treni": [
+      {
+        "id": 723,
+        "tipo": "TRADIZIONALE",
+        "desc": "Traghetto Trenitalia",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "note": "Trenitalia 7/7: 723 – 1956 – 727. Dal martedì al sabato il 1956 è a cura 303 (arrivo anticipato).",
+        "excludeOn": [],
+        "rientro": null,
+        "isAcc": false,
+        "direzione": "Uscita"
+      },
+      {
+        "id": 1956,
+        "tipo": "TRADIZIONALE",
+        "desc": "Rientro Tradizionale da Termini",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "notaDa": "Ingresso da Termini · mar-sab a cura 303",
+        "rientro": null,
+        "note": "Dal martedì al sabato a cura 303 (arrivo anticipato); domenica e lunedì Trenitalia.",
+        "excludeOn": [],
+        "isAcc": false,
+        "responsabilePerGiorno": {
+          "martedi": "303",
+          "mercoledi": "303",
+          "giovedi": "303",
+          "venerdi": "303",
+          "sabato": "303"
+        },
+        "direzione": "Ingresso"
+      },
+      {
+        "id": 727,
+        "tipo": "TRADIZIONALE",
+        "desc": "Traghetto Trenitalia",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "note": "Trenitalia 7/7: 723 – 1956 – 727. Dal martedì al sabato il 1956 è a cura 303 (arrivo anticipato).",
+        "excludeOn": [],
+        "rientro": null,
+        "isAcc": false,
+        "direzione": "Uscita"
+      },
+      {
+        "id": 534,
+        "tipo": "VALLONE",
+        "desc": "VALLONE",
+        "partenzaPP": "06:10",
+        "arrTermini": "07:13",
+        "rientro": null,
+        "note": null,
+        "excludeOn": [],
+        "isAcc": false,
+        "direzione": "Uscita"
+      },
+      {
+        "id": 581,
+        "tipo": "TRADIZIONALE",
+        "desc": "Servizio mattina",
+        "partenzaPP": null,
+        "arrTermini": "08:20",
+        "notaDa": "Rientro da Termini",
+        "rientro": null,
+        "note": "Escluso domenica.",
+        "excludeOn": [
+          "domenica"
         ],
-        note:'Rientro Tradizionale ore 6:35 Da Termini. Prendere Corsetta Parco alle 6:10 (Lun-Ven). Sab-Dom e Festivi: Taxi.',
-        excludeOn:[] },
-
-      { id:1956, tipo:'TRADIZIONALE', desc:'Rientro Tradizionale da Termini',
-        partenzaPP:null, arrTermini:null, notaDa:'Da Termini · 05:57 mar-sab / 07:24 dom-lun',
-        rientro:[{tipo:'navetta', desc:'Corsetta Parco 06:10', note:'Martedì-sabato'}],
-        note:'Martedì-sabato: rientro tradizionale da Termini alle 05:57 e Corsetta Parco alle 06:10. Domenica e lunedì: arrivo alle 07:24 nella sequenza Trenitalia.',
-        excludeOn:[] },
-
-      { id:534,  tipo:'VALLONE', desc:'VALLONE',
-        partenzaPP:'06:10', arrTermini:'07:13',
-        rientro:[{tipo:'treno', trenoNum:582, tipoTreno:'TRADIZIONALE', orario:'08:34'}],
-        note:'Rientra con il 582 da Termini, tradizionale, ore 08:34.',
-        excludeOn:[] },
-
-      { id:582,  tipo:'TRADIZIONALE', desc:'Rientro con 582',
-        partenzaPP:null, arrTermini:'08:34', notaDa:'Rientro da Termini',
-        rientro:null, note:null, excludeOn:[] },
-
-      { id:581,  tipo:'TRADIZIONALE', desc:'Servizio mattina',
-        partenzaPP:null, arrTermini:'08:20', notaDa:'Rientro da Termini',
-        rientro:null, note:'Lunedì: rientro tradizionale da Termini alle 08:20. Martedì-sabato: inserito nella sequenza Trenitalia.', excludeOn:['domenica'] },
-
-      { id:551,  tipo:'TRADIZIONALE', desc:'TRADIZIONALE',
-        partenzaPP:'08:46', arrTermini:'09:26',
-        rientro:[{tipo:'treno', trenoNum:1960, tipoTreno:'TRADIZIONALE', orario:'09:51'}],
-        note:'Il traghetto del 531 sale con il 551 dal martedì al sabato.', excludeOn:[] },
-
-      { id:1960, tipo:'TRADIZIONALE', desc:'Rientro Tradizionale da Termini',
-        presentazione:'09:51', partenzaPP:null, arrTermini:null, notaDa:'Da Termini ore 9:51',
-        rientro:null, note:'Rientro Tradizionale Ore 9:51 Da Termini.', excludeOn:[] },
-
-      { id:531,  tipo:'TRADIZIONALE', desc:'Rientro con 531',
-        partenzaPP:null, arrTermini:'08:55', notaDa:'Rientro da Termini',
-        rientro:null, note:'Martedì-sabato: rientro tradizionale ore 08:55; il traghetto sale con il 551. Lunedì a cura 303.', excludeOn:['domenica'] },
-
-      { id:553,  tipo:'TRADIZIONALE', desc:'TRADIZIONALE',
-        partenzaPP:'11:46', arrTermini:'12:26',
-        rientro:[
-          {tipo:'navetta', desc:'Navetta', orario:'12:50'},
-          {tipo:'taxi',    desc:'Taxi'}
+        "isAcc": false,
+        "direzione": "Ingresso"
+      },
+      {
+        "id": 703,
+        "tipo": "HTR",
+        "desc": "Uscita verso Termini",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "rientro": null,
+        "note": null,
+        "excludeOn": [],
+        "isAcc": false,
+        "direzione": "Uscita"
+      },
+      {
+        "id": 531,
+        "tipo": "TRADIZIONALE",
+        "desc": "Rientro con 531",
+        "partenzaPP": null,
+        "arrTermini": "08:55",
+        "notaDa": "Rientro da Termini",
+        "rientro": null,
+        "note": "Escluso domenica.",
+        "excludeOn": [
+          "domenica"
         ],
-        note:null, excludeOn:[] },
-
-      { id:723,  tipo:'TRADIZIONALE', desc:'Traghetto Trenitalia',
-        partenzaPP:null, arrTermini:null,
-        note:'Sequenza Trenitalia: domenica/lunedì 723 → 1956 → 727; martedì-sabato 723 → 581 → 727.', excludeOn:[] },
-
-      { id:727,  tipo:'TRADIZIONALE', desc:'Traghetto Trenitalia',
-        partenzaPP:null, arrTermini:null,
-        note:'Sequenza Trenitalia: domenica/lunedì 723 → 1956 → 727; martedì-sabato 723 → 581 → 727.', excludeOn:[] },
-
-      { id:540,  tipo:'VALLONE', desc:'ACC – Accessoriare/provare',
-        presentazione:'13:00', partenzaPP:null, arrTermini:null, isAcc:true,
-        note:'Da accessoriare/provare. Presentazione alle 13:00; sarà portato dal turno pomeriggio.', excludeOn:[] },
-
-      { id:592,  tipo:'TRADIZIONALE', desc:'ACC – Accessoriare/provare',
-        presentazione:'13:00', partenzaPP:null, arrTermini:null, isAcc:true,
-        note:'Da accessoriare/provare. Presentazione alle 13:00; sarà portato dal turno pomeriggio.', excludeOn:[] },
-
-      { id:555,  tipo:'TRADIZIONALE', desc:'ACC – Accessoriare/provare',
-        presentazione:'13:00', partenzaPP:null, arrTermini:null, isAcc:true,
-        note:'Da accessoriare/provare. Presentazione alle 13:00; sarà portato dal turno pomeriggio.', excludeOn:[] }
+        "isAcc": false,
+        "direzione": "Ingresso"
+      },
+      {
+        "id": 540,
+        "tipo": "VALLONE",
+        "desc": "ACC – Accessoriare/provare",
+        "presentazione": "13:00",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "isAcc": true,
+        "note": "Accessoriamento nel turno mattina; servizio nel turno pomeriggio.",
+        "excludeOn": [],
+        "rientro": null
+      },
+      {
+        "id": 771,
+        "tipo": "TRADIZIONALE",
+        "desc": "Rientro Tradizionale da Termini",
+        "presentazione": "06:35",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "notaDa": "Da Termini ore 6:35",
+        "rientro": null,
+        "note": null,
+        "excludeOn": [],
+        "isAcc": false,
+        "direzione": "Ingresso"
+      },
+      {
+        "id": 1960,
+        "tipo": "TRADIZIONALE",
+        "desc": "Rientro Tradizionale da Termini",
+        "presentazione": "09:51",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "notaDa": "Da Termini ore 9:51",
+        "rientro": null,
+        "note": null,
+        "excludeOn": [],
+        "isAcc": false,
+        "direzione": "Ingresso"
+      },
+      {
+        "id": 592,
+        "tipo": "TRADIZIONALE",
+        "desc": "ACC – Accessoriare/provare",
+        "presentazione": "13:00",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "isAcc": true,
+        "note": "Accessoriamento nel turno mattina; servizio nel turno pomeriggio.",
+        "excludeOn": [],
+        "rientro": null
+      }
     ]
   },
-
-  pomeriggio: {
-    nome:'Turno Pomeriggio', emoji:'☀️', range:'14:00 – 22:00',
-    ruoli: {
-      traghetto: { perGiorno: {
-        lunedi:null, martedi:{treni:[707,1955,702],acc:[]}, mercoledi:{treni:[707,1955,702],acc:[]},
-        giovedi:{treni:[707,1955,702],acc:[]}, venerdi:{treni:[707,1955,702],acc:[]},
-        sabato:{treni:[707,1955,702],acc:[]}, domenica:null
-      }},
-      t1: { treni:[555,591,556], acc:[774] },
-      t2: { treni:[592,546,585], acc:[] },
-      t3: { treni:[540,700,598,728], acc:[1959] }
+  "pomeriggio": {
+    "nome": "Turno Pomeriggio",
+    "emoji": "☀️",
+    "range": "14:00 – 22:00",
+    "ruoli": {
+      "traghetto": {
+        "treni": [
+          707,
+          1955,
+          702
+        ],
+        "acc": []
+      },
+      "t1": {
+        "treni": [],
+        "acc": [
+          774,
+          1959
+        ]
+      },
+      "t2": {
+        "treni": [
+          592,
+          546,
+          585
+        ],
+        "acc": []
+      },
+      "t3": {
+        "treni": [
+          540,
+          700,
+          598,
+          728
+        ],
+        "acc": []
+      }
     },
-    treni: [
-      { id:555,  tipo:'TRADIZIONALE', desc:'TRADIZIONALE',
-        partenzaPP:'13:46', arrTermini:'14:26',
-        rientro:[{tipo:'taxi', desc:'Taxi'}], note:null, excludeOn:[] },
-
-      { id:540,  tipo:'VALLONE', desc:'VALLONE',
-        partenzaPP:'14:12', arrTermini:'15:22',
-        rientro:[{tipo:'treno', trenoNum:700, tipoTreno:'TRADIZIONALE', orario:'14:34', note:'Cambio volante PdC al paraurti'}],
-        note:'Rientra con il 700 alle 14:34. Cambio volante con PdC al paraurti.', excludeOn:[] },
-
-      { id:700,  tipo:'TRADIZIONALE', desc:'Rientro con 700',
-        partenzaPP:null, arrTermini:'14:34', notaDa:'Rientro da Termini',
-        rientro:null, note:'Cambio volante con PdC al paraurti.', excludeOn:[] },
-
-      { id:592,  tipo:'VALLONE', desc:'VALLONE',
-        partenzaPP:'14:20', arrTermini:'15:30',
-        rientro:[{tipo:'taxi', desc:'Taxi'}], note:null, excludeOn:[] },
-
-      { id:707,  tipo:'TRADIZIONALE', desc:'Traghetto Trenitalia',
-        partenzaPP:null, arrTermini:null,
-        note:'Sequenza Trenitalia martedì-sabato: 707 → 1955 → 702.', excludeOn:['domenica','lunedi'] },
-
-      { id:1955, tipo:'TRADIZIONALE', desc:'Traghetto Trenitalia',
-        partenzaPP:null, arrTermini:null,
-        note:'Sequenza Trenitalia martedì-sabato: 707 → 1955 → 702.', excludeOn:['domenica','lunedi'] },
-
-      { id:702,  tipo:'TRADIZIONALE', desc:'Traghetto Trenitalia',
-        partenzaPP:null, arrTermini:null,
-        note:'Sequenza Trenitalia martedì-sabato: 707 → 1955 → 702.', excludeOn:['domenica','lunedi'] },
-
-      { id:591,  tipo:'TRADIZIONALE', desc:'TRADIZIONALE',
-        partenzaPP:'16:46', arrTermini:'17:26',
-        rientro:[{tipo:'treno', trenoNum:556, tipoTreno:'TRADIZIONALE', orario:'17:34'}],
-        note:null, excludeOn:[] },
-
-      { id:556,  tipo:'TRADIZIONALE', desc:'Rientro con 556',
-        partenzaPP:null, arrTermini:'17:34', notaDa:'Rientro da Termini',
-        rientro:null, note:null, excludeOn:[] },
-
-      { id:598,  tipo:'VALLONE', desc:'VALLONE',
-        partenzaPP:'17:05', arrTermini:'18:15',
-        rientro:[
-          {tipo:'treno', trenoNum:728, tipoTreno:'TRADIZIONALE', orario:'18:34', note:'Escluso Sabato', excludeGiorni:['sabato']},
-          {tipo:'sabato', desc:'Il Sabato: 728 da Termini (orario variabile)'}
-        ],
-        note:'598 escluso sabato. Il sabato il 728 parte da Termini.', excludeOn:['sabato'] },
-
-      { id:728,  tipo:'TRADIZIONALE', desc:'Rientro con 728',
-        partenzaPP:null, arrTermini:'18:34', notaDa:'Rientro da Termini',
-        rientro:null, note:'Il Sabato 728 parte da Termini (orario variabile).', excludeOn:[] },
-
-      { id:546,  tipo:'VALLONE', desc:'VALLONE',
-        partenzaPP:'18:45', arrTermini:'19:55',
-        rientro:[
-          {tipo:'treno', trenoNum:'*585', tipoTreno:'TRADIZIONALE', orario:'dopo le 20:00', note:'Escluso Sabato', excludeGiorni:['sabato']},
-          {tipo:'avviso', desc:'*585 sab-dom e festivi: se arriva alle 16:20 si lega con il 592', mostraGiorni:['sabato','domenica']}
-        ],
-        note:'Rientra con *585 dopo le 20. 546 escluso sabato. Sab-dom e festivi: se *585 arriva in anticipo alle 16:20, si lega con il 592.', excludeOn:['sabato'] },
-
-      { id:585,  tipo:'TRADIZIONALE', desc:'Rientro con *585',
-        partenzaPP:null, arrTermini:'dopo le 20:00', notaDa:'Rientro da Termini',
-        rientro:null, note:'Sab-dom e festivi: se arriva in anticipo alle 16:20 si lega con il 592.', excludeOn:[] },
-
-      { id:774,  tipo:'TRADIZIONALE', desc:'ACC – Accessoriare/provare',
-        presentazione:'20:30', partenzaPP:null, arrTermini:null, isAcc:true,
-        note:'Treno 774: da accessoriare/provare. Presentazione ore 20:30. Portato dal turno notte.', excludeOn:[] },
-
-      { id:1959, tipo:'TRADIZIONALE', desc:'ACC – Accessoriare/provare',
-        presentazione:'21:00', partenzaPP:null, arrTermini:null, isAcc:true,
-        note:'Treno 1959: da accessoriare/provare. Presentazione ore 21:00. Portato dal turno notte.', excludeOn:[] }
+    "treni": [
+      {
+        "id": 707,
+        "tipo": "TRADIZIONALE",
+        "desc": "Traghetto Trenitalia",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "note": "Trenitalia 7/7: 707 – 1955 – 702.",
+        "excludeOn": [],
+        "rientro": null,
+        "isAcc": false,
+        "direzione": "Uscita"
+      },
+      {
+        "id": 1955,
+        "tipo": "TRADIZIONALE",
+        "desc": "Traghetto Trenitalia",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "note": "Trenitalia 7/7: 707 – 1955 – 702.",
+        "excludeOn": [],
+        "rientro": null,
+        "isAcc": false,
+        "direzione": "Uscita"
+      },
+      {
+        "id": 702,
+        "tipo": "TRADIZIONALE",
+        "desc": "Traghetto Trenitalia",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "note": "Trenitalia 7/7: 707 – 1955 – 702.",
+        "excludeOn": [],
+        "rientro": null,
+        "isAcc": false,
+        "direzione": "Ingresso"
+      },
+      {
+        "id": 774,
+        "tipo": "TRADIZIONALE",
+        "desc": "ACC – Accessoriare/provare",
+        "presentazione": "20:30",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "isAcc": true,
+        "note": null,
+        "excludeOn": [],
+        "rientro": null
+      },
+      {
+        "id": 1959,
+        "tipo": "TRADIZIONALE",
+        "desc": "ACC – Accessoriare/provare",
+        "presentazione": "21:00",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "isAcc": true,
+        "note": null,
+        "excludeOn": [],
+        "rientro": null
+      },
+      {
+        "id": 592,
+        "tipo": "VALLONE",
+        "desc": "VALLONE",
+        "partenzaPP": "14:20",
+        "arrTermini": "15:30",
+        "rientro": null,
+        "note": null,
+        "excludeOn": [],
+        "isAcc": false,
+        "direzione": "Uscita"
+      },
+      {
+        "id": 546,
+        "tipo": "VALLONE",
+        "desc": "VALLONE",
+        "partenzaPP": "18:45",
+        "arrTermini": "19:55",
+        "rientro": null,
+        "note": null,
+        "excludeOn": [],
+        "isAcc": false,
+        "direzione": "Uscita"
+      },
+      {
+        "id": 585,
+        "tipo": "TRADIZIONALE",
+        "desc": "Rientro con *585",
+        "partenzaPP": null,
+        "arrTermini": "dopo le 20:00",
+        "notaDa": "Rientro da Termini",
+        "rientro": null,
+        "note": null,
+        "excludeOn": [],
+        "isAcc": false,
+        "direzione": "Ingresso"
+      },
+      {
+        "id": 540,
+        "tipo": "VALLONE",
+        "desc": "VALLONE",
+        "partenzaPP": "14:12",
+        "arrTermini": "15:22",
+        "rientro": null,
+        "note": null,
+        "excludeOn": [],
+        "isAcc": false,
+        "direzione": "Uscita"
+      },
+      {
+        "id": 700,
+        "tipo": "TRADIZIONALE",
+        "desc": "Rientro con 700",
+        "partenzaPP": null,
+        "arrTermini": "14:34",
+        "notaDa": "Rientro da Termini",
+        "rientro": null,
+        "note": "Cambio banco volante con PdC al paraurti.",
+        "excludeOn": [],
+        "isAcc": false,
+        "direzione": "Ingresso"
+      },
+      {
+        "id": 598,
+        "tipo": "VALLONE",
+        "desc": "VALLONE",
+        "partenzaPP": "17:05",
+        "arrTermini": "18:15",
+        "rientro": null,
+        "note": null,
+        "excludeOn": [],
+        "isAcc": false,
+        "direzione": "Uscita"
+      },
+      {
+        "id": 728,
+        "tipo": "TRADIZIONALE",
+        "desc": "Rientro con 728",
+        "partenzaPP": null,
+        "arrTermini": "18:34",
+        "notaDa": "Rientro da Termini",
+        "rientro": null,
+        "note": null,
+        "excludeOn": [],
+        "isAcc": false,
+        "direzione": "Ingresso"
+      }
     ]
   },
-
-  notte: {
-    nome:'Turno Notte', emoji:'🌙', range:'22:00 – 06:00',
-    ruoli: {
-      traghetto: null,
-      t1: { treni:[774,560], acc:[534,723,703,551,'RM','SMLB'] },
-      t2:null, t3:null
+  "notte": {
+    "nome": "Turno Notte",
+    "emoji": "🌙",
+    "range": "22:00 – 06:00",
+    "ruoli": {
+      "traghetto": null,
+      "t1": {
+        "treni": [
+          774,
+          704,
+          534,
+          723,
+          703,
+          727,
+          "RM-SMLB"
+        ],
+        "acc": [
+          701
+        ],
+        "sequenza": [
+          774,
+          704,
+          701,
+          534,
+          723,
+          703,
+          727,
+          "RM-SMLB"
+        ]
+      },
+      "t2": null,
+      "t3": null
     },
-    treni: [
-      { id:774,  tipo:'TRADIZIONALE', desc:'TRADIZIONALE',
-        partenzaPP:'21:55', arrTermini:'22:35',
-        rientro:[{tipo:'treno', trenoNum:560, tipoTreno:'TRADIZIONALE', orario:'22:35'}],
-        note:null, excludeOn:[] },
-
-      { id:560,  tipo:'TRADIZIONALE', desc:'Rientro con 560',
-        partenzaPP:null, arrTermini:'22:35', notaDa:'Rientro da Termini',
-        rientro:null, note:null, excludeOn:[] },
-
-      { id:534,  tipo:'VALLONE', desc:'ACC – Accessoriare/provare',
-        partenzaPP:null, arrTermini:null, isAcc:true,
-        note:'Treno 534: da accessoriare/provare. Sarà portato dal turno mattina.', excludeOn:[] },
-
-      { id:723,  tipo:'TRADIZIONALE', desc:'ACC – Accessoriare/provare',
-        partenzaPP:null, arrTermini:null, isAcc:true,
-        note:'Treno 723: da accessoriare/provare. Sarà portato dal turno mattina.', excludeOn:[] },
-
-      { id:703,  tipo:'HTR', desc:'ACC – Accessoriare/provare',
-        partenzaPP:null, arrTermini:null, isAcc:true,
-        note:'Da accessoriare/provare durante il turno notte.', excludeOn:[] },
-
-      { id:551,  tipo:'TRADIZIONALE', desc:'ACC – Accessoriare/provare',
-        partenzaPP:null, arrTermini:null, isAcc:true,
-        note:'Da accessoriare/provare; sarà portato dal turno mattina.', excludeOn:[] },
-
-      { id:'RM', tipo:'TRADIZIONALE', desc:'Servizio RM – su richiesta',
-        partenzaPP:null, arrTermini:null, isAcc:true,
-        note:'Servizio da accessoriare/provare; altri treni su richiesta.', excludeOn:[] },
-
-      { id:'SMLB', tipo:'TRADIZIONALE', desc:'Servizio SMLB – orario variabile',
-        partenzaPP:null, arrTermini:null, isAcc:true,
-        note:'Orario e giorni variabili. Servizio da accessoriare/provare; altri treni su richiesta.', excludeOn:[] }
+    "treni": [
+      {
+        "id": 774,
+        "tipo": "TRADIZIONALE",
+        "desc": "TRADIZIONALE",
+        "partenzaPP": "21:55",
+        "arrTermini": "22:35",
+        "rientro": null,
+        "note": "Sequenza T1 MIST (06-14-22-06): 774 – 704 – acc. 701 – 534 – 723 – 703 – 727 – RM-SMLB.",
+        "excludeOn": [],
+        "isAcc": false,
+        "direzione": "Uscita"
+      },
+      {
+        "id": 704,
+        "tipo": "NON INDICATO",
+        "desc": "Servizio da documento",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "rientro": null,
+        "note": null,
+        "excludeOn": [],
+        "isAcc": false,
+        "direzione": "Ingresso"
+      },
+      {
+        "id": 701,
+        "tipo": "NON INDICATO",
+        "desc": "ACC – Accessoriare/provare",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "rientro": null,
+        "note": null,
+        "excludeOn": [],
+        "isAcc": true
+      },
+      {
+        "id": 534,
+        "tipo": "VALLONE",
+        "desc": "Servizio turno notte",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "isAcc": false,
+        "note": null,
+        "excludeOn": [],
+        "rientro": null,
+        "direzione": "Uscita"
+      },
+      {
+        "id": 723,
+        "tipo": "TRADIZIONALE",
+        "desc": "Servizio turno notte",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "isAcc": false,
+        "note": null,
+        "excludeOn": [],
+        "rientro": null,
+        "direzione": "Uscita"
+      },
+      {
+        "id": 703,
+        "tipo": "HTR",
+        "desc": "Servizio turno notte",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "isAcc": false,
+        "note": null,
+        "excludeOn": [],
+        "rientro": null,
+        "direzione": "Uscita"
+      },
+      {
+        "id": 727,
+        "tipo": "NON INDICATO",
+        "desc": "Servizio da documento",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "rientro": null,
+        "note": null,
+        "excludeOn": [],
+        "isAcc": false,
+        "direzione": "Uscita"
+      },
+      {
+        "id": "RM-SMLB",
+        "tipo": "NON INDICATO",
+        "desc": "RM → SMLB",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "rientro": null,
+        "note": "Periodicità variabile.",
+        "excludeOn": [],
+        "isAcc": false,
+        "direzione": "RM → SMLB"
+      },
+      {
+        "id": 764,
+        "tipo": "NON INDICATO",
+        "desc": "Prova freno su richiesta",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "rientro": null,
+        "note": "A cura degli altri abilitati MIST in IMC e su richiesta: prova freno ai treni 764 e 789.",
+        "excludeOn": [],
+        "isAcc": false,
+        "responsabile": "Altri abilitati MIST"
+      },
+      {
+        "id": 789,
+        "tipo": "NON INDICATO",
+        "desc": "Prova freno su richiesta",
+        "partenzaPP": null,
+        "arrTermini": null,
+        "rientro": null,
+        "note": "A cura degli altri abilitati MIST in IMC e su richiesta: prova freno ai treni 764 e 789.",
+        "excludeOn": [],
+        "isAcc": false,
+        "responsabile": "Altri abilitati MIST"
+      }
     ]
   }
 };
@@ -740,7 +1208,7 @@ function getTreniPerFiltro(turnoKey, filtro) {
   if (filtro === 'tutti') return turno.treni;
   const ruolo = getRuoloData(turno, filtro);
   if (!ruolo) return [];
-  const allIds = [...ruolo.treni, ...ruolo.acc];
+  const allIds = ruolo.sequenza || [...ruolo.treni, ...ruolo.acc];
   return allIds.map(id => turno.treni.find(t => String(t.id) === String(id))).filter(Boolean);
 }
 
@@ -794,6 +1262,8 @@ function renderTrenoList(containerId, turnoKey, highlightCurrent) {
     const tipoClass = treno.tipo==='VALLONE'?'tipo-vallone':treno.tipo==='HTR'?'tipo-htr':'tipo-tradizionale';
 
     let roleBadge = '';
+    const externalRole = treno.responsabilePerGiorno?.[getGiorno()] || treno.responsabile;
+    if (externalRole) roleBadge = `<span class="trole-badge">${externalRole}</span>`;
     if (ruolo) {
       const rl = ruolo==='traghetto'?'Trenitalia':ruolo.toUpperCase();
       roleBadge = `<span class="trole-badge trole-${ruolo}">${rl}</span>`;
@@ -815,6 +1285,7 @@ function renderTrenoList(containerId, turnoKey, highlightCurrent) {
         <span class="treno-tipo ${tipoClass}">${treno.tipo}</span>
         ${isAcc?'<span class="acc-badge-sm">🔧 ACC</span>':''}
       </div>
+      ${treno.direzione?`<div class="treno-orari">${treno.direzione}</div>`:''}
       ${orarioStr?`<div class="treno-orari">${orarioStr}</div>`:''}
       ${isExcluded?`<div class="excluded-label">⚠️ Escluso oggi (${giorno})</div>`:''}
       ${treno.note?'<span class="note-pill">Note</span>':''}
@@ -840,7 +1311,7 @@ function openDetail(treno, turnoKey) {
   let seqHTML = '';
   const rd = ruolo ? getRuoloData(TURNI[turnoKey], ruolo, giorno) : null;
   if (ruolo && rd) {
-    const seqItems = [...rd.treni.map(id=>({id,acc:false})), ...rd.acc.map(id=>({id,acc:true}))];
+    const seqItems = (rd.sequenza || [...rd.treni, ...rd.acc]).map(id => ({id, acc:rd.acc.includes(id)}));
     const roleLabel = ruolo==='traghetto'?'Trenitalia':ruolo.toUpperCase()+' MIST';
     const flow = seqItems.map((s,i) => {
       const isCur = String(s.id)===String(treno.id);
@@ -947,6 +1418,7 @@ function openDetail(treno, turnoKey) {
         <span style="font-size:12px;color:var(--muted)">${treno.desc}</span>
       </div>
     </div>
+    ${treno.direzione?`<div class="note-box">${treno.direzione}</div>`:''}
     ${seqHTML}
     ${infoHTML}
     ${provaHTML}
@@ -996,6 +1468,8 @@ function cercaTreno() {
     if (treno.arrTermini) orarioStr += (orarioStr?' → ':'') + 'T. ' + treno.arrTermini;
     if (treno.notaDa) orarioStr = treno.notaDa;
     let roleBadge = '';
+    const externalRole = treno.responsabilePerGiorno?.[getGiorno()] || treno.responsabile;
+    if (externalRole) roleBadge = `<span class="trole-badge">${externalRole}</span>`;
     if (ruolo) {
       const rl = ruolo==='traghetto'?'Trenitalia':ruolo.toUpperCase();
       roleBadge = '<span class="trole-badge trole-'+ruolo+'">'+rl+'</span>';
