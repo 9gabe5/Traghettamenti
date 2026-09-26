@@ -337,14 +337,14 @@
   </div>
 </div>
 
-<div class="note-box" style="margin:12px 16px">Assegnazioni dal 13/09/2026. Il nuovo documento non riporta gli orari dei singoli treni né il tipo di materiale: quelli già presenti provengono dalla versione precedente e non sono confermati dal nuovo prospetto.</div>
+<div class="note-box" style="margin:12px 16px">Assegnazioni dal 13/09/2026. Orari dei singoli treni e materiali non aggiornati dalla comunicazione operativa restano quelli della versione precedente, non confermati dal prospetto. Materiali aggiornati con le disposizioni del 13 e 18 settembre.</div>
 
 <!-- HOME -->
 <div class="screen active" id="screenHome">
   <div class="home-logo">
     <span class="train-icon"><img src="assets/logo-pop.png" alt="Logo frontale elettrotreno Pop"></span>
     <div>
-      <div class="data-chip">Aggiornato dal 13 settembre 2026</div>
+      <div class="data-chip">Disposizioni del 13 e 18 settembre 2026</div>
       <div class="line1">Traghettamenti</div>
       <div class="line2">Parco Prenestino</div>
     </div>
@@ -362,6 +362,7 @@
     <span class="arrow">→</span>
   </button>
 
+  <section id="disposizioniMateriali" style="grid-column:1/-1" aria-label="Disposizioni sui materiali"></section>
   <div class="search-wrap">
     <div class="search-label">🔍 Cerca treno</div>
     <div class="search-row">
@@ -1106,6 +1107,37 @@ const TURNI = {
   }
 };
 
+// Materiali: comunicazione operativa fornita dall'utente. Nessuna nuova assegnazione di turno dedotta.
+const MATERIALI = {
+  duplex: { ids:[723,727], tipo:'HTR DUPLEX', note:'Dal 13/09/2026: materiale HTR Duplex. Numerazione 1-2-3-4 (Siracusa) e 11-12-13-14 (Palermo); ordine dei due convogli non vincolante. Le casse 1 e 11 sono di prima classe e corrispondono alla DM2. In caso di materiale ordinario, comunicare la variazione di trazione al DCT e privilegiarne l’impiego sul 727. Rinumerare come 11-14 anche i materiali ordinari.' },
+  bemu: { ids:[701,702,703,704,707,700,705,710], tipo:'BEMU', note:'Dal 13/09/2026: materiale BEMU. In caso di indisponibilità, possibile impiego di materiale ordinario composto da E464-3wt+SP. Eventualmente effettuare il 703 con materiale ordinario per ridurre il rischio di non avere abilitati HTR al mattino. Non far scadere BEMU e semitreni nel weekend.' },
+  pop: { ids:[591,553], tipo:'POP', note:'Dal 13/09/2026: servizio effettuato con materiale POP.' }
+};
+const NOTA_TRENI_NOTTE = 'Dal 18/09/2026 tutti i treni notte verranno effettuati con E464.';
+// "Treni notte" identifica i servizi della comunicazione, non ogni attività del turno notturno.
+function materialePer(id) { return Object.values(MATERIALI).find(m => m.ids.includes(Number(id))); }
+Object.values(TURNI).forEach(turno => turno.treni.forEach(treno => {
+  const materiale = materialePer(treno.id);
+  if (materiale) {
+    treno.tipo = materiale.tipo;
+    treno.materialeNote = materiale.note;
+    // Il nuovo materiale non autorizza a dedurre una modalità di prova freno.
+    treno.materialeAggiornato = true;
+  }
+}));
+const SERVIZI_MATERIALI = Object.values(MATERIALI).flatMap(m => m.ids)
+  .filter(id => !Object.values(TURNI).some(turno => turno.treni.some(t => t.id === id)))
+  .map(id => ({ id, tipo:materialePer(id).tipo, desc:'Informazioni materiale',
+    materialeNote:materialePer(id).note, materialeAggiornato:true, excludeOn:[],
+    note:'Assegnazione al traghetto e orari non indicati nella comunicazione. Questo servizio non è aggiunto ai turni operativi.' }));
+function renderDisposizioni() {
+  document.getElementById('disposizioniMateriali').innerHTML =
+    '<div class="section-title">Materiali e disposizioni operative</div>' +
+    Object.values(MATERIALI).map(m => `<details class="note-box"><summary><strong>${m.tipo} · ${m.ids.join(' · ')}</strong></summary><p>${m.note}</p></details>`).join('') +
+    `<div class="note-box"><strong>Treni notte · dal 18 settembre</strong><p>${NOTA_TRENI_NOTTE}</p></div>`;
+}
+renderDisposizioni();
+
 // ── STATE ──────────────────────────────────────────────────────────────────────
 let currentMode = 'consulta';
 let currentTurnoKey = 'mattina';
@@ -1213,6 +1245,7 @@ function getTreniPerFiltro(turnoKey, filtro) {
 }
 
 function getRuoloDiTreno(turnoKey, trenoId, giorno=getGiorno()) {
+  if (!TURNI[turnoKey]) return null;
   const ruoli = TURNI[turnoKey].ruoli;
   for (const key of Object.keys(ruoli)) {
     const r = getRuoloData(TURNI[turnoKey], key, giorno);
@@ -1259,7 +1292,7 @@ function renderTrenoList(containerId, turnoKey, highlightCurrent) {
       isNow = Math.abs(nowMin-(h*60+m)) < 60;
     }
 
-    const tipoClass = treno.tipo==='VALLONE'?'tipo-vallone':treno.tipo==='HTR'?'tipo-htr':'tipo-tradizionale';
+    const tipoClass = treno.tipo==='VALLONE'?'tipo-vallone':['HTR','HTR DUPLEX','BEMU'].includes(treno.tipo)?'tipo-htr':'tipo-tradizionale';
 
     let roleBadge = '';
     const externalRole = treno.responsabilePerGiorno?.[getGiorno()] || treno.responsabile;
@@ -1304,7 +1337,7 @@ function openDetail(treno, turnoKey) {
   const isDomenica = giorno==='domenica';
   const isSabato = giorno==='sabato';
 
-  const tipoClass = treno.tipo==='VALLONE'?'tipo-vallone':treno.tipo==='HTR'?'tipo-htr':'tipo-tradizionale';
+  const tipoClass = treno.tipo==='VALLONE'?'tipo-vallone':['HTR','HTR DUPLEX','BEMU'].includes(treno.tipo)?'tipo-htr':'tipo-tradizionale';
   const ruolo = getRuoloDiTreno(turnoKey, treno.id);
 
   // Sequenza ruolo
@@ -1338,7 +1371,7 @@ function openDetail(treno, turnoKey) {
 
   // Prova freno
   let provaHTML = '';
-  if (!treno.isAcc && (treno.tipo==='VALLONE'||treno.tipo==='TRADIZIONALE'||treno.tipo==='HTR')) {
+  if (!treno.materialeAggiornato && !treno.isAcc && (treno.tipo==='VALLONE'||treno.tipo==='TRADIZIONALE'||treno.tipo==='HTR')) {
     const daC = treno.tipo==='VALLONE';
     provaHTML = `<div class="prova-box">
       <div class="prova-icon">${daC?'🔚':'🔛'}</div>
@@ -1424,6 +1457,7 @@ function openDetail(treno, turnoKey) {
     ${provaHTML}
     ${accHTML}
     ${rientroHTML}
+    ${treno.materialeNote?`<div class="note-box"><div class="note-box-title">Materiale · dal 13/09/2026</div>${treno.materialeNote}</div>`:''}
     ${noteHTML}
     ${statoHTML}
   `;
@@ -1451,6 +1485,10 @@ function cercaTreno() {
     });
   });
 
+  SERVIZI_MATERIALI.forEach(treno => {
+    if (String(treno.id) === q) results.push({treno, turnoKey:null});
+  });
+
   if (!results.length) {
     container.innerHTML = '<div class="search-not-found">Nessun treno trovato con numero ' + q + '</div>';
     return;
@@ -1460,9 +1498,9 @@ function cercaTreno() {
   wrap.className = 'search-results-wrap';
 
   results.forEach(({ treno, turnoKey }) => {
-    const t = TURNI[turnoKey];
+    const t = TURNI[turnoKey] || {emoji:'', nome:'Materiali · assegnazione non indicata'};
     const ruolo = getRuoloDiTreno(turnoKey, treno.id);
-    const tipoClass = treno.tipo==='VALLONE'?'tipo-vallone':treno.tipo==='HTR'?'tipo-htr':'tipo-tradizionale';
+    const tipoClass = treno.tipo==='VALLONE'?'tipo-vallone':['HTR','HTR DUPLEX','BEMU'].includes(treno.tipo)?'tipo-htr':'tipo-tradizionale';
     let orarioStr = '';
     if (treno.partenzaPP) orarioStr = 'PP ' + treno.partenzaPP;
     if (treno.arrTermini) orarioStr += (orarioStr?' → ':'') + 'T. ' + treno.arrTermini;
