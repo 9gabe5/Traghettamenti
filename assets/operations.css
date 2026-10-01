@@ -4,3 +4,20 @@
 @media(max-width:800px){.crew-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:640px){.tabs{gap:20px}.tab{font-size:13px}.train{grid-template-columns:55px 1fr 10px;gap:8px}.schedule-time{flex-basis:120px}.captain-controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}.captain-controls select,.captain-controls input{width:100%;max-width:100%;font-size:13px}.crew-panel{padding:16px}}
 
 .suggestion{border:1px solid #b9cbbc;border-radius:10px;padding:12px;background:#eef3e9;text-align:left;font-size:12px;line-height:1.6;overflow-wrap:anywhere}.suggestion:hover{background:var(--accent)}
+
+.captain-print-controls{margin-bottom:20px}.captain-print-controls button{border:0;border-radius:10px;padding:12px 18px;min-height:44px;background:var(--ink);color:white;font-weight:650}.captain-print-controls button:disabled{opacity:.45;cursor:not-allowed}.captain-print-controls p{margin:8px 0 0}#captainPrintSheet{display:none}
+@page{size:A4 portrait;margin:12mm}
+@media print{
+ body.captain-print{background:white!important;color:#000!important;font-family:Arial,sans-serif;font-size:9pt;line-height:1.3;margin:0}
+ body.captain-print>*{display:none!important}
+ body.captain-print>#captainPrintSheet{display:block!important}
+ .print-heading{display:flex;align-items:center;justify-content:space-between;gap:10mm;padding:0 0 5mm;margin:0 0 3mm;border-bottom:1pt solid #333;background:white;color:#000}
+ .print-heading p{margin:0 0 2mm;font-size:8pt;letter-spacing:.7pt}.print-heading h1{margin:0;font-size:18pt;letter-spacing:0}.print-heading>div:last-child{text-align:right;font-size:10pt;line-height:1.6}
+ .print-summary{margin:0 0 4mm;font-size:9pt}
+ .print-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:9pt;line-height:1.25}
+ .print-table th,.print-table td{border: .5pt solid #aaa;padding:2mm;text-align:left;vertical-align:top;overflow-wrap:anywhere;word-wrap:break-word}
+ .print-table thead th{font-size:8pt;background:#eee;color:#000}
+ .print-table .print-person th{padding:2.5mm 2mm;border-top:1pt solid #555;background:#f2f2f2;font-size:10pt}.print-person span{float:right;font-size:8pt;font-weight:normal}
+ .print-table tr{break-inside:avoid;page-break-inside:avoid}.print-person{break-after:avoid;page-break-after:avoid}.print-table thead{display:table-header-group}
+ .print-footnote{font-size:8pt;line-height:1.4;margin:4mm 0 0;color:#333}
+}
