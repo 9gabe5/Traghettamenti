@@ -1,0 +1,20 @@
+ORARI CORRETTI SECONDO IL FOGLIO TRAGHETTAMENTI
+
+Estrai lo ZIP e sostituisci:
+- traghettamenti.html nella cartella principale
+- operations.js e operations.css nella cartella assets
+Gli altri file aggiornano documentazione e verifiche. Non cancellare le immagini.
+Questo pacchetto comprende anche la stampa A4 e tutti gli aggiornamenti precedenti del Capoturno.
+
+Correzioni principali:
+723: P.p. 06:40, P.t. 07:26
+727: P.p. 10:40, P.t. 11:26
+707: P.p. 14:46, P.t. 15:26
+1955: P.p. 19:51, P.t. 20:31
+702: arrivo Termini 20:34
+1956: arrivo Termini 07:24 solo domenica e lunedi; negli altri giorni assegnazione 303 preservata senza attribuire un orario assente dal foglio.
+Le 06:10 indicano la corsetta per raggiungere il 771, non il 534.
+Non essendo riportati nel foglio, gli orari del 534/581 al mattino e delle prove 774/1959 al pomeriggio sono lasciati non indicati.
+Assegnazioni e salvataggi esistenti restano compatibili.
+
+Test superati: orari del foglio, eccezioni, ricerca, assegnazioni e stampa. Impaginazione verificata su una pagina A4 per ciascun turno.
