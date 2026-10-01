@@ -1,0 +1,17 @@
+AGGIORNAMENTO CAPOTURNO
+
+Estrai lo ZIP prima di caricare i file: non caricare lo ZIP nella repository.
+
+Sostituisci nella repository 9gabe5/Traghettamenti, ramo main:
+- traghettamenti.html nella cartella principale
+- operations.js e operations.css nella cartella assets
+- README.md nella cartella principale
+- operations.cjs nella cartella tests
+- aggiungi captain.cjs nella cartella tests
+
+Non occorre cancellare o sostituire le immagini gia presenti in assets.
+Per ogni caricamento usa Add file > Upload files e conferma Commit changes.
+
+Le tre modifiche funzionali sono in traghettamenti.html, assets/operations.js e assets/operations.css. README e tests documentano e verificano le modifiche.
+
+Verifiche: test della logica superati; verifica grafica nel browser non completata.

@@ -15,7 +15,7 @@
 <section id="capoturno" hidden aria-label="Gestione Capoturno">
 <div class="captain-controls"><label>Data di servizio<input type="date" id="captainDate" required></label><label>Turno<select id="captainShift"><option value="mattina">Mattina · 06–14</option><option value="pomeriggio">Pomeriggio · 14–22</option><option value="notte">Notte · 22–06</option></select></label></div>
 <p class="subline">La data identifica l’inizio del turno, anche per la notte. Disponibili = servizi previsti nel turno, non ancora assegnati. Gli orari sono quelli del prospetto, non la disponibilità in tempo reale.</p>
-<section class="crew-panel"><h3>Traghettatori presenti <span class="pill">max. 5</span></h3><p class="subline">Inserisci un nome per ogni persona presente. Ogni persona può avere più servizi. Cancellando un nome, i suoi servizi tornano da assegnare.</p><div id="crewFields" class="crew-fields"></div></section>
+<section class="crew-panel"><h3>Traghettatori presenti <span class="pill">max. 6</span></h3><p class="subline">Inserisci un nome per ogni persona presente. Ogni persona può avere più servizi. TI e 303 sono assegnati automaticamente dal prospetto; gli altri servizi restano da assegnare ai colleghi. I suggerimenti collegano i servizi della stessa squadra T1, T2 o T3. Cancellando un nome, i suoi servizi tornano da assegnare.</p><div id="crewFields" class="crew-fields"></div></section>
 <div class="captain-summary" id="captainSummary" role="status"></div>
 <label class="captain-filter">Mostra<select id="captainFilter"><option value="available">Da assegnare</option><option value="assigned">Assegnati</option><option value="completed">Completati</option><option value="all">Tutti i servizi</option></select></label>
 <div id="captainTrains" class="groups"></div>

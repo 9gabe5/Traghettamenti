@@ -17,20 +17,21 @@ Le pagine Turni, Cerca treno e Capoturno mostrano gli orari direttamente nelle s
 ## Capoturno
 
 1. Selezionare data e turno. Per la notte la data è quella di inizio turno; prima delle 06:00 viene proposta la data precedente.
-2. Inserire fino a cinque traghettatori. Ogni persona può ricevere più servizi.
+2. Inserire fino a sei traghettatori. Ogni persona può ricevere più servizi.
 3. Assegnare un servizio usando il menu nella scheda: sparirà dalla vista **Da assegnare**.
 4. Usare **Assegnati**, **Completati** o **Tutti i servizi** per rivedere le assegnazioni, cambiarle o segnare il completamento.
 5. Selezionare **Da assegnare** nel menu di una scheda per liberare il servizio. Cancellare un nome libera i suoi servizi; modificare il nome mantiene le assegnazioni della stessa posizione.
 
-“Disponibile” significa previsto per il turno e non ancora assegnato, senza filtro sull'ora attuale. La responsabilità 303 o degli altri abilitati, quando prevista, resta indicata.
+“Disponibile” significa previsto per il turno e non ancora assegnato, senza filtro sull'ora attuale. TI e 303 sono assegnati automaticamente secondo lo schema del giorno (1956: 303 martedì–sabato, T1 domenica–lunedì). Gli altri servizi si assegnano ai colleghi. Dopo un’assegnazione, gli altri servizi liberi della stessa squadra T1/T2/T3 propongono il collega con un pulsante di conferma; assegnazioni già presenti non vengono sovrascritte. I vecchi salvataggi a cinque nomi restano compatibili.
 
 I dati sono salvati in `localStorage`, separatamente per data e turno, soltanto nel browser/dispositivo corrente. Non c'è sincronizzazione tra dispositivi o gestione centralizzata degli operatori. Un avviso segnala gli errori di salvataggio. Cambiare il dominio o cancellare i dati del browser impedisce di recuperare i salvataggi precedenti.
 
 ## Verifica
 
-Con Node.js, Playwright e Google Chrome disponibili, avviare un server statico sulla porta 8765 e poi eseguire:
+Il test della logica `node tests/captain.cjs` richiede soltanto Node.js. Per la verifica completa nel browser, con Node.js, Playwright e Chromium installato tramite `npx playwright install chromium` disponibili, avviare un server statico sulla porta 8765 e poi eseguire:
 
 ```sh
+node tests/captain.cjs
 node tests/operations.cjs
 ```
 
