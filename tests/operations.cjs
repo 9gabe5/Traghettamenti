@@ -3,7 +3,7 @@
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
 (async()=>{
- const browser=await chromium.launch({channel:'chrome',headless:true});
+ const browser=await chromium.launch({headless:true});
  try{
  const context=await browser.newContext({viewport:{width:1280,height:900}});
  const p=await context.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
@@ -16,7 +16,7 @@ const assert=require('node:assert/strict');
  await p.locator('[data-page=cerca]').click();await p.locator('#query').fill('734');assert.match(await p.locator('#searchResults').innerText(),/728/);assert.match(await p.locator('#searchResults').innerText(),/18:34/);
  await p.locator('[data-page=capoturno]').click();
  await p.locator('#captainDate').fill('2026-10-03');await p.locator('#captainShift').selectOption('pomeriggio');
- assert.equal(await p.locator('[data-crew]').count(),5);
+ assert.equal(await p.locator('[data-crew]').count(),6);
  assert.equal(await p.locator('#captainTrains [data-id="598"]').count(),0);
  assert.equal(await p.locator('#captainTrains [data-id="546"]').count(),0);
  assert.equal(await p.locator('#captainTrains [data-id="728"]').count(),1);
@@ -51,11 +51,42 @@ const assert=require('node:assert/strict');
  await p.locator('[data-page=turni]').click();
  assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
  if(process.env.SCREENSHOT_DIR)await p.screenshot({path:process.env.SCREENSHOT_DIR+'/turni-mobile.png',fullPage:true});
+ // Fixed assignments follow the dated roster, not the train description.
+ await p.locator('[data-page=capoturno]').click();
+ await p.locator('#captainDate').fill('2026-10-01');await p.locator('#captainShift').selectOption('mattina');
+ await p.locator('#captainFilter').selectOption('all');
+ for(const id of [534,581,553]){assert.equal(await p.locator(`[data-assign="${id}"]`).inputValue(),'TI');assert.equal(await p.locator(`[data-assign="${id}"]`).isDisabled(),true)}
+ assert.equal(await p.locator('[data-assign="1956"]').inputValue(),'303');
+ await p.locator('[data-crew="5"]').fill('Sesto Collega');
+ await p.locator('[data-assign="727"]').selectOption('5');
+ assert.match(await p.locator('[data-suggest="723"]').innerText(),/Sesto Collega.*T1 MIST.*727/);
+ assert.equal(await p.locator('[data-suggest="1956"]').count(),0);
+ assert.equal(await p.locator('[data-suggest="703"]').count(),0);
+ await p.locator('[data-suggest="723"]').click();assert.equal(await p.locator('[data-assign="723"]').inputValue(),'5');
+ await p.locator('[data-complete="534"]').check();
+ await p.reload();await p.locator('[data-page=capoturno]').click();await p.locator('#captainDate').fill('2026-10-01');await p.locator('#captainShift').selectOption('mattina');await p.locator('#captainFilter').selectOption('all');
+ assert.equal(await p.locator('[data-crew="5"]').inputValue(),'Sesto Collega');assert.equal(await p.locator('[data-assign="723"]').inputValue(),'5');assert.equal(await p.locator('[data-complete="534"]').isChecked(),true);
+ await p.locator('[data-assign="723"]').selectOption('');
+ assert.equal(await p.locator('[data-suggest="723"]').count(),1);
+ await p.locator('[data-crew="5"]').fill('');assert.equal(await p.locator('[data-suggest="723"]').count(),0);assert.equal(await p.locator('[data-assign="534"]').inputValue(),'TI');
+ await p.locator('#captainDate').fill('2026-10-04');
+ assert.equal(await p.locator('[data-assign="1956"]').inputValue(),'');
+ await p.locator('[data-crew="0"]').fill('Tizio');await p.locator('[data-assign="727"]').selectOption('0');
+ assert.equal(await p.locator('[data-suggest="1956"]').count(),1);
+ await p.locator('[data-crew="1"]').fill('Caio');await p.locator('[data-assign="723"]').selectOption('1');
+ assert.equal(await p.locator('[data-suggest="723"]').count(),0);
+ assert.equal(await p.locator('[data-suggest="1956"]').count(),2);
+ // Migrate old five-slot saves and correct previously assigned TI/303 services.
+ await p.evaluate(()=>localStorage.setItem('traghettamenti.capoturno.v1.2026-10-02.mattina',JSON.stringify({names:['Legacy','','','',''],assignments:{727:0,534:0,1956:0},completed:{727:true}})));
+ await p.locator('#captainDate').fill('2026-10-02');
+ assert.equal(await p.locator('[data-crew]').count(),6);assert.equal(await p.locator('[data-assign="727"]').inputValue(),'0');assert.equal(await p.locator('[data-complete="727"]').isChecked(),true);
+ assert.equal(await p.locator('[data-assign="534"]').inputValue(),'TI');assert.equal(await p.locator('[data-assign="1956"]').inputValue(),'303');
+ assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
  assert.deepEqual(errors,[]);
  await context.close();
  // Disabled storage must not break scheduling or assignment within the page.
  const denied=await browser.newContext();await denied.addInitScript(()=>{Storage.prototype.getItem=()=>{throw Error('denied')};Storage.prototype.setItem=()=>{throw Error('denied')}});
  const q=await denied.newPage();await q.goto((process.env.BASE_URL||'http://127.0.0.1:8765')+'/traghettamenti.html');await q.locator('[data-page=capoturno]').click();await q.locator('[data-crew="0"]').fill('Test');assert.match(await q.locator('#saveStatus').innerText(),/Impossibile salvare/);await denied.close();
- console.log('PASS: timetable, PDF aliases, Saturday/Sunday exclusions, five operators, assignment/reassignment/release, completion, persistence, date/shift isolation, night activities, escaping, storage failure, desktop/mobile layout.');
+ console.log('PASS: timetable, PDF aliases, Saturday/Sunday exclusions, six operators, fixed TI/303 responsibility, roster suggestions, assignment/reassignment/release, completion, persistence, date/shift isolation, night activities, escaping, storage failure, desktop/mobile layout.');
  }finally{await browser.close()}
 })().catch(e=>{console.error(e);process.exitCode=1});
