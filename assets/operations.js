@@ -47,7 +47,39 @@ let captainDate=romeDate(),captainShift=shift,captainState;
 // Before 06:00 the current night shift began on the previous calendar day.
 if(hour<6){const d=new Date(captainDate+'T12:00:00Z');d.setUTCDate(d.getUTCDate()-1);captainDate=d.toISOString().slice(0,10)}
 function captainKey(){return captainPrefix+captainDate+'.'+captainShift}
-function emptyCaptain(){return {names:['','','','',''],assignments:{},completed:{}}}
+function emptyCaptain(){return {names:Array(6).fill(''),assignments:{},completed:{}}}
+// Resolve responsibility from the dated roster, never from descriptive train text.
+function captainRole(t){
+  const weekday=weekdayFor(captainDate);
+  if(t.responsabilePerGiorno?.[weekday]==='303'||t.responsabile==='303')return 'external';
+  if(t.responsabile)return 'other';
+  for(const role of ['traghetto','t1','t2','t3']){
+    const data=TURNI[captainShift].ruoli[role];
+    const roster=data?.perGiorno?data.perGiorno[weekday]:data;
+    if(roster&&[...roster.treni,...roster.acc].some(id=>String(id)===String(t.id)))return role;
+  }
+  return null;
+}
+function fixedCaptain(t){const role=captainRole(t);return role==='traghetto'?'TI':role==='external'?'303':null}
+function syncFixedCaptain(){
+  for(const t of captainServices()){
+    const fixed=fixedCaptain(t);
+    if(fixed)captainState.assignments[t.id]=fixed;
+  }
+}
+function captainSuggestions(t){
+  const role=captainRole(t);
+  if(!['t1','t2','t3'].includes(role)||captainState.assignments[t.id]!==undefined)return [];
+  const bySlot=new Map();
+  for(const source of captainServices()){
+    const slot=captainState.assignments[source.id];
+    if(captainRole(source)===role&&Number.isInteger(slot)&&captainState.names[slot]?.trim()){
+      if(!bySlot.has(slot))bySlot.set(slot,[]);
+      bySlot.get(slot).push(source.id);
+    }
+  }
+  return [...bySlot].map(([slot,ids])=>({slot,ids,role}));
+}
 function loadCaptain(){
   captainState=emptyCaptain();
   try{
@@ -56,7 +88,7 @@ function loadCaptain(){
       captainState.names=captainState.names.map((_,i)=>typeof stored.names[i]==='string'?stored.names[i].slice(0,60):'');
       for(const t of TURNI[captainShift].treni){
         const id=String(t.id),slot=stored.assignments?.[id];
-        if(Number.isInteger(slot)&&slot>=0&&slot<5&&captainState.names[slot].trim()){
+        if(fixedCaptain(t)||Number.isInteger(slot)&&slot>=0&&slot<6&&captainState.names[slot].trim()){
           captainState.assignments[id]=slot;
           if(stored.completed?.[id]===true)captainState.completed[id]=true;
         }
@@ -64,6 +96,7 @@ function loadCaptain(){
     }
     $('saveStatus').textContent='Nomi e assegnazioni sono salvati solo in questo browser e su questo dispositivo, separati per data e turno.';
   }catch{$('saveStatus').textContent='Salvataggio locale non disponibile o dati illeggibili. Le modifiche resteranno solo in questa sessione.'}
+  syncFixedCaptain();
 }
 function saveCaptain(){
   try{localStorage.setItem(captainKey(),JSON.stringify(captainState));$('saveStatus').textContent='Salvato su questo dispositivo · '+captainDate.split('-').reverse().join('/')+' · '+TURNI[captainShift].nome+'. Non sincronizzato con altri dispositivi.'}
@@ -77,6 +110,7 @@ function renderCaptain(){
   renderCaptainTrains();
 }
 function renderCaptainTrains(){
+  syncFixedCaptain();
   const services=captainServices(),a=captainState.assignments,c=captainState.completed;
   const available=services.filter(t=>a[t.id]===undefined).length;
   const completed=services.filter(t=>c[t.id]).length;
@@ -85,11 +119,12 @@ function renderCaptainTrains(){
   const visible=services.filter(t=>mode==='all'||(mode==='available'?a[t.id]===undefined:mode==='completed'?c[t.id]:a[t.id]!==undefined&&!c[t.id]));
   const named=captainState.names.some(n=>n.trim());
   $('captainTrains').innerHTML=visible.map(t=>{
-    const id=String(t.id),slot=a[id];
+    const id=String(t.id),slot=a[id],fixed=fixedCaptain(t);
+    const suggestions=captainSuggestions(t).map(({slot,ids,role})=>`<button type="button" class="suggestion" data-suggest="${esc(id)}" data-slot="${slot}">Suggerito: ${esc(captainState.names[slot].trim())} · ${esc(ROLE[role])} (già assegnato a ${ids.map(esc).join(', ')}) — Assegna anche il ${esc(id)}</button>`).join('');
     const options=captainState.names.map((n,i)=>n.trim()?`<option value="${i}" ${slot===i?'selected':''}>${esc(n.trim())}</option>`:'').join('');
     const weekday=weekdayFor(captainDate);
     const responsible=t.responsabilePerGiorno?.[weekday]||t.responsabile;
-    return `<article class="group captain-card">${train(t,captainShift)}${responsible?`<p class="responsible-note">Responsabilità da prospetto: ${esc(responsible)}</p>`:''}<div class="assign-controls"><label>Assegna il ${esc(id)} a<select data-assign="${esc(id)}" ${!named?'disabled':''}><option value="">Da assegnare</option>${options}</select></label>${slot!==undefined?`<label class="completion"><input type="checkbox" data-complete="${esc(id)}" ${c[id]?'checked':''}> Completato</label>`:(!named?'<small>Inserisci un nome sopra per assegnare.</small>':'')}</div></article>`;
+    return `<article class="group captain-card">${train(t,captainShift)}${responsible?`<p class="responsible-note">Responsabilità da prospetto: ${esc(responsible)}</p>`:''}<div class="assign-controls"><label>Assegna il ${esc(id)} a<select data-assign="${esc(id)}" ${fixed||!named?'disabled':''}>${fixed?`<option value="${fixed}" selected>${fixed}</option>`:`<option value="">Da assegnare</option>${options}`}</select></label>${fixed?'<small>Assegnazione automatica da prospetto.</small>':suggestions}${slot!==undefined?`<label class="completion"><input type="checkbox" data-complete="${esc(id)}" ${c[id]?'checked':''}> Completato</label>`:(!named?'<small>Inserisci un nome sopra per assegnare.</small>':'')}</div></article>`;
   }).join('')||'<div class="empty">Nessun servizio in questa categoria.</div>';
 }
 $('captainDate').value=captainDate;$('captainShift').value=captainShift;
@@ -106,8 +141,10 @@ $('crewFields').addEventListener('input',e=>{
 $('captainTrains').addEventListener('change',e=>{
   if(e.target.matches('[data-assign]')){
     const id=e.target.dataset.assign;
+    const service=captainServices().find(t=>String(t.id)===id);
+    if(!service||fixedCaptain(service))return;
     if(e.target.value==='')delete captainState.assignments[id];
-    else{const slot=Number(e.target.value);if(!Number.isInteger(slot)||slot<0||slot>4||!captainState.names[slot].trim())return;captainState.assignments[id]=slot}
+    else{const slot=Number(e.target.value);if(!Number.isInteger(slot)||slot<0||slot>=6||!captainState.names[slot].trim())return;captainState.assignments[id]=slot}
     delete captainState.completed[id];
   }else if(e.target.matches('[data-complete]')){
     const id=e.target.dataset.complete;if(captainState.assignments[id]===undefined)return;
@@ -116,3 +153,12 @@ $('captainTrains').addEventListener('change',e=>{
   saveCaptain();renderCaptainTrains();
 });
 window.addEventListener('storage',e=>{if(e.key===captainKey()||e.key===null){loadCaptain();if(page==='capoturno')renderCaptain()}});
+
+$('captainTrains').addEventListener('click',e=>{
+  const button=e.target.closest('[data-suggest]');if(!button)return;
+  const id=button.dataset.suggest,slot=Number(button.dataset.slot);
+  const service=captainServices().find(t=>String(t.id)===id);
+  if(!service||!captainSuggestions(service).some(s=>s.slot===slot))return;
+  captainState.assignments[id]=slot;delete captainState.completed[id];
+  saveCaptain();renderCaptainTrains();
+});
